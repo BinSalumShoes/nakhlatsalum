@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nahlat Collection | Premium Clothing & Footwear</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2 { font-family: 'Playfair Display', serif; }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <nav class="flex justify-between items-center px-8 py-6 bg-white shadow-sm sticky top-0 z-50">
+        <div class="text-2xl font-bold tracking-widest text-black">NAHLAT</div>
+        <ul class="hidden md:flex space-x-8 font-medium text-sm uppercase tracking-wider">
+            <li><a href="#" class="hover:text-gold-600">Home</a></li>
+            <li><a href="#clothing" class="hover:text-gold-600">Clothing</a></li>
+            <li><a href="#shoes" class="hover:text-gold-600">Shoes</a></li>
+            <li><a href="#contact" class="hover:text-gold-600">Contact</a></li>
+        </ul>
+        <div class="flex space-x-5 text-lg">
+            <i class="fa-solid fa-magnifying-glass cursor-pointer"></i>
+            <i class="fa-solid fa-bag-shopping cursor-pointer"></i>
+        </div>
+    </nav>
+
+    <header class="relative h-[80vh] flex items-center justify-center bg-gray-900 text-white overflow-hidden">
+        <div class="absolute inset-0 opacity-60">
+            <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1920&q=80" alt="Fashion Hero" class="w-full h-full object-cover">
+        </div>
+        <div class="relative text-center px-4">
+            <h1 class="text-5xl md:text-7xl mb-4">Elevate Your Style</h1>
+            <p class="text-lg md:text-xl mb-8 font-light">Discover the curated Nahlat Collection.</p>
+            <a href="#clothing" class="bg-white text-black px-10 py-4 uppercase text-xs font-bold tracking-widest hover:bg-black hover:text-white transition">Shop Now</a>
+        </div>
+    </header>
+
+    <section class="max-w-7xl mx-auto py-20 px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div id="clothing" class="relative group cursor-pointer overflow-hidden h-96">
+                <img src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+                    <h2 class="text-white text-4xl">Clothing</h2>
+                </div>
+            </div>
+            <div id="shoes" class="relative group cursor-pointer overflow-hidden h-96">
+                <img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+                    <h2 class="text-white text-4xl">Footwear</h2>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-white py-20">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl text-center mb-12">New Arrivals</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="group">
+                    <div class="bg-gray-100 aspect-[3/4] mb-4 overflow-hidden relative">
+                        <div class="absolute top-4 left-4 bg-black text-white text-[10px] px-2 py-1 uppercase">New</div>
+                        <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=500&q=80" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-semibold text-sm">Classic Trench Coat</h3>
+                    <p class="text-gray-500 text-sm">$120.00</p>
+                </div>
+                <div class="group">
+                    <div class="bg-gray-100 aspect-[3/4] mb-4 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=500&q=80" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-semibold text-sm">Urban Sneakers</h3>
+                    <p class="text-gray-500 text-sm">$85.00</p>
+                </div>
+                </div>
+        </div>
+    </section>
+
+    <footer id="contact" class="bg-black text-white py-16 px-8">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 border-b border-gray-800 pb-12">
+            <div>
+                <h3 class="text-xl font-bold mb-4">NAHLAT COLLECTION</h3>
+                <p class="text-gray-400 text-sm leading-relaxed">High-quality fashion curated for the modern individual. Quality shoes and clothing delivered to your door.</p>
+            </div>
+            <div>
+                <h4 class="font-bold mb-4 uppercase text-xs tracking-widest">Customer Care</h4>
+                <ul class="text-gray-400 text-sm space-y-2">
+                    <li>Shipping Policy</li>
+                    <li>Returns & Exchanges</li>
+                    <li>Size Guide</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold mb-4 uppercase text-xs tracking-widest">Connect</h4>
+                <div class="flex space-x-4 text-xl">
+                    <i class="fa-brands fa-instagram cursor-pointer hover:text-gray-400"></i>
+                    <i class="fa-brands fa-tiktok cursor-pointer hover:text-gray-400"></i>
+                    <i class="fa-brands fa-facebook cursor-pointer hover:text-gray-400"></i>
+                </div>
+            </div>
+        </div>
+        <div class="text-center pt-8 text-gray-500 text-[10px] uppercase tracking-widest">
+            &copy; 2026 Nahlat Collection. All Rights Reserved.
+        </div>
+    </footer>
+
+</body>
+</html>
