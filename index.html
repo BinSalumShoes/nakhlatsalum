@@ -12,7 +12,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            background-color: #111;
+            background-color: #0b0b0b;
             color: #fff;
             min-height: 100vh;
             display: flex;
@@ -21,81 +21,93 @@
             overflow: hidden;
         }
 
-        /* --- MUONEKANO WA MCHEZO WA SPIDER-MAN --- */
+        /* --- MUONEKANO WA MCHEZO NA MANENO MENGI --- */
         #gameScreen {
             width: 100%;
             max-width: 400px;
-            height: 90vh;
-            background: linear-gradient(135deg, #8b0000, #1a0000);
+            height: 92vh;
+            background: linear-gradient(135deg, #7a0000, #120000);
             border-radius: 20px;
-            padding: 20px;
+            padding: 18px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3);
-            border: 2px solid #ff4d4d;
-            position: relative;
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.2);
+            border: 2px solid #e63946;
         }
         .game-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            padding-bottom: 10px;
         }
         .game-title {
-            font-size: 20px;
+            font-size: 19px;
             font-weight: 900;
             color: #ffd700;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        /* KITUFE CHA SIRI CHA KUFUNGUA VAULT (Kimefichwa kwenye alama ndogo) */
-        .secret-trigger {
-            background: none;
-            border: none;
-            color: rgba(255, 255, 255, 0.2);
-            font-size: 18px;
-            cursor: pointer;
+        .game-desc-box {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 12px;
+            color: #cbd5e1;
+            line-height: 1.5;
+            max-height: 180px;
+            overflow-y: auto;
+            border: 1px solid rgba(255,255,255,0.1);
         }
+        /* NENO LA SIRI LILILOFICHWA NDANI YA MAELEZO */
+        .secret-link {
+            color: #cbd5e1; /* Rangi sawa na maneno mengine ili isionekane tofauti */
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .secret-link:hover {
+            color: #cbd5e1;
+        }
+
         .game-board {
             flex: 1;
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.3);
             border-radius: 12px;
-            margin: 15px 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            position: relative;
-            border: 1px dashed rgba(255, 255, 255, 0.2);
+            border: 1px dashed rgba(255, 255, 255, 0.15);
+            margin-bottom: 10px;
         }
         .spidey-icon {
-            font-size: 60px;
+            font-size: 50px;
             animation: bounce 1.5s infinite alternate;
         }
         @keyframes bounce {
             from { transform: translateY(0); }
-            to { transform: translateY(-15px); }
+            to { transform: translateY(-10px); }
         }
         .score-board {
-            font-size: 18px;
-            margin-top: 10px;
+            font-size: 16px;
+            margin-top: 8px;
             color: #00ffff;
         }
         .btn-play {
-            background: #ff4d4d;
+            background: #e63946;
             color: white;
             border: none;
-            padding: 15px;
+            padding: 14px;
             border-radius: 12px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
             text-transform: uppercase;
-            box-shadow: 0 5px 15px rgba(255, 77, 77, 0.4);
+            box-shadow: 0 4px 12px rgba(230, 57, 70, 0.4);
             transition: 0.2s;
         }
         .btn-play:active {
-            transform: scale(0.95);
+            transform: scale(0.96);
         }
 
         /* --- MUONEKANO WA VAULT YA SIRI --- */
@@ -103,7 +115,7 @@
             display: none;
             width: 100%;
             max-width: 450px;
-            height: 90vh;
+            height: 92vh;
             background: #1e1e1e;
             padding: 20px;
             border-radius: 20px;
@@ -123,7 +135,7 @@
             color: #ffd700;
         }
         .btn-lock {
-            background: #ff4d4d;
+            background: #e63946;
             color: white;
             border: none;
             padding: 6px 12px;
@@ -169,7 +181,7 @@
         .delete-btn {
             width: 100%;
             background: #222;
-            color: #ff4d4d;
+            color: #e63946;
             border: none;
             padding: 5px;
             font-size: 11px;
@@ -183,7 +195,7 @@
             padding: 40px 0;
         }
 
-        /* Modal ya kuingiza PIN ya Vault */
+        /* Modal ya PIN */
         #pinModal {
             display: none;
             position: fixed;
@@ -195,7 +207,7 @@
         }
         .modal-box {
             background: #1e1e1e;
-            padding: 20px;
+            padding: 22px;
             border-radius: 12px;
             width: 80%;
             max-width: 280px;
@@ -212,37 +224,40 @@
             color: #fff;
             font-size: 20px;
             text-align: center;
-            letter-spacing: 5px;
+            letter-spacing: 6px;
+            outline: none;
         }
     </style>
 </head>
 <body>
 
-    <!-- 1. SEHEMU YA MCHEZO WA SPIDER-MAN -->
+    <!-- 1. SEHEMU YA MCHEZO NA MAELEZO MENGI -->
     <div id="gameScreen">
         <div class="game-header">
-            <span class="game-title">🕷️ Spidey Web Runner</span>
-            <!-- Ukibonyeza hapa kwenye kitufe hiki kidogo cha siri, italeta sehemu ya kuweka PIN -->
-            <button class="secret-trigger" onclick="promptPin()">⚙️</button>
+            <span class="game-title">🕷️ Spider-Man: Web Runner</span>
+        </div>
+
+        <!-- Sehemu yenye maelezo mengi ya mchezo na neno la siri limejificha ndani yake -->
+        <div class="game-desc-box">
+            <p>Karibu kwenye mchezo rasmi wa Spider-Man Web Runner v2.4. Dhamira kuu ya mchezo huu ni kupima uwezo wako wa kuruka kutoka jengo moja hadi jingine huku ukikwepa vikwazo na kukusanya sarafu za dhahabu. Unaweza kuchagua viwango tofauti vya ugumu kupitia menyu kuu au kupitia eneo maalum la <span class="secret-link" onclick="promptPin()">playground</span> ambalo linapatikana kwa ajili ya majaribio ya michoro ya ziada na viwango vipya vya siri vya mchezo huu.</p>
         </div>
 
         <div class="game-board">
             <div class="spidey-icon">🦸‍♂️</div>
             <div class="score-board">Alama: <span id="score">0</span></div>
-            <p style="font-size: 12px; color: #aaa; margin-top: 15px; text-align: center;">Bonyeza kitufe chini kuruka majengo na kukusanya sarafu!</p>
         </div>
 
         <button class="btn-play" onclick="playGame()">Ruka (Jump)</button>
     </div>
 
-    <!-- 2. VAULT YA SIRI -->
+    <!-- 2. VAULT YA SIRI YA PICHA -->
     <div id="vaultScreen">
         <div class="vault-header">
             <h2>🔒 Picha Zangu za Siri</h2>
             <button class="btn-lock" onclick="lockVault()">Rudi Kwenye Mchezo</button>
         </div>
 
-        <label for="imageInput" class="btn-upload">+ Ficha Picha Mpya</label>
+        <label for="imageInput" class="btn-upload">+ Weka Picha Mpya</label>
         <input type="file" id="imageInput" accept="image/*" multiple>
 
         <div class="gallery" id="gallery"></div>
@@ -251,17 +266,17 @@
     <!-- Modal ya PIN -->
     <div id="pinModal">
         <div class="modal-box">
-            <h3 style="color: #ffd700; font-size: 16px;">Weka PIN ya Siri</h3>
+            <h3 style="color: #ffd700; font-size: 16px; margin-bottom: 5px;">Weka PIN ya Siri</h3>
             <input type="password" id="pinInput" maxlength="4" placeholder="****">
             <div style="display: flex; gap: 8px;">
-                <button class="btn-play" style="flex:1; padding: 8px; font-size: 14px; background:#444;" onclick="closeModal()">Ghairi</button>
-                <button class="btn-play" style="flex:1; padding: 8px; font-size: 14px;" onclick="verifyPin()">Ingia</button>
+                <button class="btn-play" style="flex:1; padding: 8px; font-size: 13px; background:#444;" onclick="closeModal()">Ghairi</button>
+                <button class="btn-play" style="flex:1; padding: 8px; font-size: 13px;" onclick="verifyPin()">Ingia</button>
             </div>
         </div>
     </div>
 
     <script>
-        const SECRET_PIN = "1234"; // Badili iwe namba yako ya siri
+        const SECRET_PIN = "1234"; // Badili hapa iwe namba yako ya siri unayotaka
         let score = 0;
 
         const gameScreen = document.getElementById('gameScreen');
@@ -274,13 +289,12 @@
 
         let photos = JSON.parse(localStorage.getItem('spidey_vault_photos')) || [];
 
-        // Mantiki ya mchezo
         function playGame() {
             score += 10;
             scoreDisplay.innerText = score;
         }
 
-        // Kufungua modal ya PIN ya siri
+        // Kufungua kisanduku cha PIN pale neno "playground" litakapobonyezwa
         function promptPin() {
             pinInput.value = "";
             pinModal.style.display = 'flex';
@@ -307,7 +321,6 @@
             gameScreen.style.display = 'flex';
         }
 
-        // Kusimamia picha za Vault
         imageInput.addEventListener('change', function(e) {
             const files = e.target.files;
             for (let file of files) {
