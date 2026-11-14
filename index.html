@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculator</title>
+    <title>English - Swahili Dictionary</title>
     <style>
         * {
             box-sizing: border-box;
@@ -12,93 +12,122 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            background-color: #000000;
-            color: #ffffff;
+            background-color: #0f172a;
+            color: #f8fafc;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            padding: 15px;
         }
 
-        /* --- MUONEKANO WA KIKOKOTOO (KIINI MACHO) --- */
-        #calculatorScreen {
+        /* --- MUONEKANO WA KAMUSI (KIINI MACHO) --- */
+        #dictScreen {
             width: 100%;
-            max-width: 360px;
-            padding: 20px;
+            max-width: 420px;
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 1px solid #334155;
         }
-        .calc-display {
-            width: 100%;
-            height: 90px;
-            background: #000;
+        .dict-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        .dict-subtitle {
+            font-size: 13px;
+            color: #94a3b8;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .search-input {
+            flex: 1;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid #475569;
+            background: #0f172a;
             color: #fff;
-            font-size: 48px;
-            text-align: right;
-            padding: 15px;
-            border: none;
+            font-size: 15px;
             outline: none;
-            margin-bottom: 15px;
-            overflow-x: auto;
         }
-        .calc-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
+        .search-input:focus {
+            border-color: #38bdf8;
         }
-        .calc-btn {
-            height: 70px;
-            border-radius: 50%;
+        .search-btn {
+            background: #38bdf8;
+            color: #0f172a;
             border: none;
-            font-size: 26px;
-            font-weight: 500;
+            padding: 0 18px;
+            border-radius: 10px;
+            font-weight: bold;
             cursor: pointer;
-            background-color: #333333;
-            color: #ffffff;
-            transition: 0.1s;
+            transition: 0.2s;
         }
-        .calc-btn:active {
-            opacity: 0.7;
+        .search-btn:hover {
+            background: #0ea5e9;
         }
-        .btn-top {
-            background-color: #a5a5a5;
-            color: #000000;
+        .result-card {
+            background: #0f172a;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            min-height: 120px;
         }
-        .btn-op {
-            background-color: #ff9f0a;
-            color: #ffffff;
+        .result-word {
+            font-size: 18px;
+            font-weight: bold;
+            color: #38bdf8;
+            margin-bottom: 5px;
         }
-        .btn-zero {
-            grid-column: span 2;
-            border-radius: 35px;
-            text-align: left;
-            padding-left: 28px;
+        .result-pos {
+            font-size: 12px;
+            color: #f43f5e;
+            font-style: italic;
+            margin-bottom: 8px;
+        }
+        .result-meaning {
+            font-size: 14px;
+            color: #cbd5e1;
+            line-height: 1.5;
         }
 
         /* --- MUONEKANO WA VAULT YA SIRI --- */
         #vaultScreen {
             display: none;
             width: 100%;
-            max-width: 600px;
-            min-height: 100vh;
-            background-color: #121212;
+            max-width: 500px;
+            min-height: 90vh;
+            background: #1e293b;
             padding: 20px;
+            border-radius: 16px;
+            border: 1px solid #334155;
         }
         .vault-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #333;
-            margin-bottom: 20px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 12px;
+            margin-bottom: 15px;
         }
         .vault-header h2 {
-            font-size: 20px;
-            color: #ff9f0a;
+            font-size: 18px;
+            color: #38bdf8;
         }
         .btn-lock {
-            background-color: #d9534f;
+            background: #ef4444;
             color: white;
             border: none;
-            padding: 8px 14px;
+            padding: 6px 12px;
             border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
@@ -106,160 +135,162 @@
         .btn-upload {
             display: block;
             width: 100%;
-            background-color: #ff9f0a;
-            color: #000;
-            padding: 14px;
-            border-radius: 8px;
+            background: #38bdf8;
+            color: #0f172a;
+            padding: 12px;
+            border-radius: 10px;
             text-align: center;
             font-weight: bold;
-            font-size: 16px;
             cursor: pointer;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            transition: 0.2s;
         }
         input[type="file"] {
             display: none;
         }
         .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             gap: 12px;
+            max-height: 65vh;
+            overflow-y: auto;
+            padding-right: 5px;
         }
         .card {
-            background-color: #1e1e1e;
-            border-radius: 8px;
+            background: #0f172a;
+            border-radius: 10px;
             overflow: hidden;
-            border: 1px solid #333;
+            border: 1px solid #334155;
         }
         .card img {
             width: 100%;
-            height: 130px;
+            height: 120px;
             object-fit: cover;
             display: block;
         }
         .delete-btn {
             width: 100%;
-            background-color: #2a2a2a;
-            color: #ff6b6b;
+            background: #1e293b;
+            color: #f43f5e;
             border: none;
-            padding: 8px;
-            font-size: 13px;
+            padding: 6px;
+            font-size: 12px;
             font-weight: bold;
             cursor: pointer;
         }
         .empty-msg {
             text-align: center;
-            color: #777;
+            color: #64748b;
             grid-column: 1 / -1;
-            padding: 40px 0;
+            padding: 30px 0;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
 
-    <!-- 1. KIKOKOTOO CHA KAWAIDA (KIINI MACHO) -->
-    <div id="calculatorScreen">
-        <input type="text" class="calc-display" id="display" value="0" readonly>
-        <div class="calc-grid">
-            <button class="calc-btn btn-top" onclick="clearDisplay()">AC</button>
-            <button class="calc-btn btn-top" onclick="deleteLast()">⌫</button>
-            <button class="calc-btn btn-top" onclick="appendValue('%')">%</button>
-            <button class="calc-btn btn-op" onclick="appendValue('/')">÷</button>
+    <!-- 1. UKURASA WA KAMUSI (KIINI MACHO) -->
+    <div id="dictScreen">
+        <div class="dict-title">English - Swahili</div>
+        <div class="dict-subtitle">Advanced Offline Dictionary</div>
+        
+        <div class="search-box">
+            <input type="text" id="wordInput" class="search-input" placeholder="Andika neno kutafuta...">
+            <button class="search-btn" onclick="searchWord()">Tafuta</button>
+        </div>
 
-            <button class="calc-btn" onclick="appendValue('7')">7</button>
-            <button class="calc-btn" onclick="appendValue('8')">8</button>
-            <button class="calc-btn" onclick="appendValue('9')">9</button>
-            <button class="calc-btn btn-op" onclick="appendValue('*')">×</button>
-
-            <button class="calc-btn" onclick="appendValue('4')">4</button>
-            <button class="calc-btn" onclick="appendValue('5')">5</button>
-            <button class="calc-btn" onclick="appendValue('6')">6</button>
-            <button class="calc-btn btn-op" onclick="appendValue('-')">−</button>
-
-            <button class="calc-btn" onclick="appendValue('1')">1</button>
-            <button class="calc-btn" onclick="appendValue('2')">2</button>
-            <button class="calc-btn" onclick="appendValue('3')">3</button>
-            <button class="calc-btn btn-op" onclick="appendValue('+')">+</button>
-
-            <button class="calc-btn btn-zero" onclick="appendValue('0')">0</button>
-            <button class="calc-btn" onclick="appendValue('.')">.</button>
-            <button class="calc-btn btn-op" onclick="calculate()">=</button>
+        <div class="result-card" id="resultCard">
+            <div class="result-word" id="resWord">Karibu</div>
+            <div class="result-pos" id="resPos">nomino [noun]</div>
+            <div class="result-meaning" id="resMeaning">Andika neno lolote la Kiingereza au Kiswahili hapo juu ili kupata maana yake.</div>
         </div>
     </div>
 
-    <!-- 2. VAULT YA SIRI (INAFUNGUKA UKIWEKA PIN + =) -->
+    <!-- 2. VAULT YA SIRI (INAFUNGUKA KWA KODI YA SIRI) -->
     <div id="vaultScreen">
         <div class="vault-header">
             <h2>🔒 Picha Zangu za Siri</h2>
-            <button class="btn-lock" onclick="lockVault()">Funga (Lock)</button>
+            <button class="btn-lock" onclick="lockVault()">Funga</button>
         </div>
 
-        <label for="imageInput" class="btn-upload">+ Ficha Picha Mpya Hapa</label>
+        <label for="imageInput" class="btn-upload">+ Weka Picha Mpya</label>
         <input type="file" id="imageInput" accept="image/*" multiple>
 
         <div class="gallery" id="gallery"></div>
     </div>
 
     <script>
-        const SECRET_PIN = "1234"; // Badili hii iwe namba yako ya siri
-        const display = document.getElementById('display');
-        const calculatorScreen = document.getElementById('calculatorScreen');
+        const SECRET_CODE = "1234"; // Namba au neno la siri la kufungua vault
+
+        // Kamusi ya sampuli ya maneno
+        const dictionaryData = {
+            "hello": { pos: "kiingumizo [interjection]", meaning: "Hujambo, Salamu, Shikamoo." },
+            "love": { pos: "nomino / kitenzi [noun/verb]", meaning: "Upendo, Mapenzi, Kupenda kwa dhati." },
+            "friend": { pos: "nomino [noun]", meaning: "Rafiki, Mwenzi, Msiri." },
+            "book": { pos: "nomino [noun]", meaning: "Kitabu, Daftari la kusomea." },
+            "car": { pos: "nomino [noun]", meaning: "Gari, Usafiri wa magurudumu manne." },
+            "water": { pos: "nomino [noun]", meaning: "Maji ya kunywa au kutumia majumbani." },
+            "apple": { pos: "nomino [noun]", meaning: "Tofaa, tunda tamu lenye afya." },
+            "computer": { pos: "nomino [noun]", meaning: "Kompyuta, Kifaa cha kielektroniki cha kuhifadhi na kuchakata taarifa." }
+        };
+
+        const wordInput = document.getElementById('wordInput');
+        const resWord = document.getElementById('resWord');
+        const resPos = document.getElementById('resPos');
+        const resMeaning = document.getElementById('resMeaning');
+        
+        const dictScreen = document.getElementById('dictScreen');
         const vaultScreen = document.getElementById('vaultScreen');
         const imageInput = document.getElementById('imageInput');
         const gallery = document.getElementById('gallery');
 
-        let photos = JSON.parse(localStorage.getItem('secret_calc_photos')) || [];
+        let photos = JSON.parse(localStorage.getItem('dict_vault_photos')) || [];
 
-        // --- KAZI ZA KIKOKOTOO ---
-        function appendValue(val) {
-            if (display.value === "0" || display.value === "Error") {
-                display.value = val;
-            } else {
-                display.value += val;
+        // Ruhusu kubonyeza "Enter" kwenye kibodi kutafuta
+        wordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchWord();
             }
-        }
+        });
 
-        function clearDisplay() {
-            display.value = "0";
-        }
+        function searchWord() {
+            let query = wordInput.value.trim().toLowerCase();
 
-        function deleteLast() {
-            if (display.value.length > 1) {
-                display.value = display.value.slice(0, -1);
-            } else {
-                display.value = "0";
-            }
-        }
+            if (query === "") return;
 
-        function calculate() {
-            // Angalia kama aliyeandika ameingiza PIN ya siri
-            if (display.value === SECRET_PIN) {
+            // ANGALIA KAMA AMEINGIZA KODI YA SIRI YA VAULT
+            if (query === SECRET_CODE) {
                 openVault();
                 return;
             }
 
-            // Kama siyo PIN, fanya hesabu ya kawaida
-            try {
-                let result = eval(display.value);
-                display.value = result;
-            } catch (e) {
-                display.value = "Error";
+            // Tafuta kwenye kamusi
+            if (dictionaryData[query]) {
+                resWord.innerText = query.charAt(0).toUpperCase() + query.slice(1);
+                resPos.innerText = dictionaryData[query].pos;
+                resMeaning.innerText = dictionaryData[query].meaning;
+            } else {
+                resWord.innerText = query;
+                resPos.innerText = "haijulikani [unknown]";
+                resMeaning.innerText = "Samahani, hatujapata maana ya neno hili kwenye hifadhi yetu kwa sasa.";
             }
         }
 
         // --- KAZI ZA VAULT YA SIRI ---
         function openVault() {
-            display.value = "0";
-            calculatorScreen.style.display = "none";
+            wordInput.value = "";
+            dictScreen.style.display = "none";
             vaultScreen.style.display = "block";
-            document.body.style.alignItems = "flex-start";
             renderGallery();
         }
 
         function lockVault() {
             vaultScreen.style.display = "none";
-            calculatorScreen.style.display = "block";
-            document.body.style.alignItems = "center";
-            display.value = "0";
+            dictScreen.style.display = "block";
+            wordInput.value = "";
+            resWord.innerText = "Karibu";
+            resPos.innerText = "nomino [noun]";
+            resMeaning.innerText = "Andika neno lolote la Kiingereza au Kiswahili hapo juu ili kupata maana yake.";
         }
 
         imageInput.addEventListener('change', function(e) {
@@ -279,7 +310,7 @@
         });
 
         function deletePhoto(id) {
-            if (confirm("Futa picha hii kabisa?")) {
+            if (confirm("Futa picha hii?")) {
                 photos = photos.filter(p => p.id !== id);
                 saveAndRender();
             }
@@ -287,9 +318,9 @@
 
         function saveAndRender() {
             try {
-                localStorage.setItem('secret_calc_photos', JSON.stringify(photos));
+                localStorage.setItem('dict_vault_photos', JSON.stringify(photos));
             } catch (e) {
-                alert("Nafasi ya kuhifadhi imejaa! Futa baadhi ya picha.");
+                alert("Kumbukumbu imejaa! Futa baadhi ya picha.");
             }
             renderGallery();
         }
@@ -297,15 +328,15 @@
         function renderGallery() {
             gallery.innerHTML = '';
             if (photos.length === 0) {
-                gallery.innerHTML = '<div class="empty-msg">Hakuna picha iliyofichwa bado.<br>Bonyeza kitufe cha njano hapo juu kuongeza.</div>';
+                gallery.innerHTML = '<div class="empty-msg">Hakuna picha iliyofichwa bado.</div>';
                 return;
             }
             photos.forEach(photo => {
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.innerHTML = `
-                    <img src="${photo.src}" alt="Secret">
-                    <button class="delete-btn" onclick="deletePhoto(${photo.id})">Futa Picha</button>
+                    <img src="${photo.src}" alt="Vault Image">
+                    <button class="delete-btn" onclick="deletePhoto(${photo.id})">Futa</button>
                 `;
                 gallery.appendChild(card);
             });
