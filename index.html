@@ -21,7 +21,7 @@
             padding: 15px;
         }
 
-        /* --- MUONEKANO WA KAMUSI (KIINI MACHO) --- */
+        /* --- MUONEKANO WA KAMUSI --- */
         #dictScreen {
             width: 100%;
             max-width: 420px;
@@ -189,10 +189,10 @@
 </head>
 <body>
 
-    <!-- 1. UKURASA WA KAMUSI (KIINI MACHO) -->
+    <!-- 1. UKURASA WA KAMUSI -->
     <div id="dictScreen">
         <div class="dict-title">English - Swahili</div>
-        <div class="dict-subtitle">Advanced Offline Dictionary</div>
+        <div class="dict-subtitle">Advanced Offline/Online Dictionary</div>
         
         <div class="search-box">
             <input type="text" id="wordInput" class="search-input" placeholder="Andika neno kutafuta...">
@@ -202,11 +202,11 @@
         <div class="result-card" id="resultCard">
             <div class="result-word" id="resWord">Karibu</div>
             <div class="result-pos" id="resPos">nomino [noun]</div>
-            <div class="result-meaning" id="resMeaning">Andika neno lolote la Kiingereza au Kiswahili hapo juu ili kupata maana yake.</div>
+            <div class="result-meaning" id="resMeaning">Andika neno lolote la Kiingereza ili kupata maana yake kwa urahisi.</div>
         </div>
     </div>
 
-    <!-- 2. VAULT YA SIRI (INAFUNGUKA KWA KODI YA SIRI) -->
+    <!-- 2. VAULT YA SIRI -->
     <div id="vaultScreen">
         <div class="vault-header">
             <h2>🔒 Picha Zangu za Siri</h2>
@@ -220,19 +220,7 @@
     </div>
 
     <script>
-        const SECRET_CODE = "1234"; // Namba au neno la siri la kufungua vault
-
-        // Kamusi ya sampuli ya maneno
-        const dictionaryData = {
-            "hello": { pos: "kiingumizo [interjection]", meaning: "Hujambo, Salamu, Shikamoo." },
-            "love": { pos: "nomino / kitenzi [noun/verb]", meaning: "Upendo, Mapenzi, Kupenda kwa dhati." },
-            "friend": { pos: "nomino [noun]", meaning: "Rafiki, Mwenzi, Msiri." },
-            "book": { pos: "nomino [noun]", meaning: "Kitabu, Daftari la kusomea." },
-            "car": { pos: "nomino [noun]", meaning: "Gari, Usafiri wa magurudumu manne." },
-            "water": { pos: "nomino [noun]", meaning: "Maji ya kunywa au kutumia majumbani." },
-            "apple": { pos: "nomino [noun]", meaning: "Tofaa, tunda tamu lenye afya." },
-            "computer": { pos: "nomino [noun]", meaning: "Kompyuta, Kifaa cha kielektroniki cha kuhifadhi na kuchakata taarifa." }
-        };
+        const SECRET_CODE = "1234"; // Namba yako ya siri ya kufungua picha
 
         const wordInput = document.getElementById('wordInput');
         const resWord = document.getElementById('resWord');
@@ -246,33 +234,48 @@
 
         let photos = JSON.parse(localStorage.getItem('dict_vault_photos')) || [];
 
-        // Ruhusu kubonyeza "Enter" kwenye kibodi kutafuta
         wordInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 searchWord();
             }
         });
 
-        function searchWord() {
+        async function searchWord() {
             let query = wordInput.value.trim().toLowerCase();
 
             if (query === "") return;
 
-            // ANGALIA KAMA AMEINGIZA KODI YA SIRI YA VAULT
+            // 1. ANGALIA KAMA AMEINGIZA KODI YA SIRI YA VAULT
             if (query === SECRET_CODE) {
                 openVault();
                 return;
             }
 
-            // Tafuta kwenye kamusi
-            if (dictionaryData[query]) {
-                resWord.innerText = query.charAt(0).toUpperCase() + query.slice(1);
-                resPos.innerText = dictionaryData[query].pos;
-                resMeaning.innerText = dictionaryData[query].meaning;
-            } else {
+            // 2. TAFUTA KUPITIA MTANDAO ILI NENO LOLOTE LIONEKANE
+            resWord.innerText = "Inatafuta...";
+            resPos.innerText = "...";
+            resMeaning.innerText = "Tafadhali subiri kidogo...";
+
+            try {
+                let response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${query}`);
+                if (!response.ok) {
+                    throw new Error("Neno halikupatikana");
+                }
+                let data = await response.json();
+                
+                let wordInfo = data[0];
+                let meaningObj = wordInfo.meanings[0];
+                let definition = meaningObj.definitions[0].definition;
+                let partOfSpeech = meaningObj.partOfSpeech || "neno";
+
+                resWord.innerText = wordInfo.word;
+                resPos.innerText = `aina: ${partOfSpeech}`;
+                resMeaning.innerText = definition;
+
+            } catch (error) {
                 resWord.innerText = query;
                 resPos.innerText = "haijulikani [unknown]";
-                resMeaning.innerText = "Samahani, hatujapata maana ya neno hili kwenye hifadhi yetu kwa sasa.";
+                resMeaning.innerText = "Samahani, neno hili halikupatikana kwenye hifadhi au halina maana sahihi ya Kiingereza.";
             }
         }
 
@@ -290,7 +293,7 @@
             wordInput.value = "";
             resWord.innerText = "Karibu";
             resPos.innerText = "nomino [noun]";
-            resMeaning.innerText = "Andika neno lolote la Kiingereza au Kiswahili hapo juu ili kupata maana yake.";
+            resMeaning.innerText = "Andika neno lolote la Kiingereza ili kupata maana yake kwa urahisi.";
         }
 
         imageInput.addEventListener('change', function(e) {
