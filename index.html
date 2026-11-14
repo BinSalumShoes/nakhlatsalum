@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kificha Picha (Photo Vault)</title>
+    <title>Calculator</title>
     <style>
         * {
             box-sizing: border-box;
@@ -12,176 +12,256 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            background-color: #121212;
+            background-color: #000000;
             color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- MUONEKANO WA KIKOKOTOO (KIINI MACHO) --- */
+        #calculatorScreen {
+            width: 100%;
+            max-width: 360px;
             padding: 20px;
         }
-        header {
-            text-align: center;
-            padding: 15px 0;
+        .calc-display {
+            width: 100%;
+            height: 90px;
+            background: #000;
+            color: #fff;
+            font-size: 48px;
+            text-align: right;
+            padding: 15px;
+            border: none;
+            outline: none;
+            margin-bottom: 15px;
+            overflow-x: auto;
+        }
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        .calc-btn {
+            height: 70px;
+            border-radius: 50%;
+            border: none;
+            font-size: 26px;
+            font-weight: 500;
+            cursor: pointer;
+            background-color: #333333;
+            color: #ffffff;
+            transition: 0.1s;
+        }
+        .calc-btn:active {
+            opacity: 0.7;
+        }
+        .btn-top {
+            background-color: #a5a5a5;
+            color: #000000;
+        }
+        .btn-op {
+            background-color: #ff9f0a;
+            color: #ffffff;
+        }
+        .btn-zero {
+            grid-column: span 2;
+            border-radius: 35px;
+            text-align: left;
+            padding-left: 28px;
+        }
+
+        /* --- MUONEKANO WA VAULT YA SIRI --- */
+        #vaultScreen {
+            display: none;
+            width: 100%;
+            max-width: 600px;
+            min-height: 100vh;
+            background-color: #121212;
+            padding: 20px;
+        }
+        .vault-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
             border-bottom: 1px solid #333;
             margin-bottom: 20px;
         }
-        h1 {
-            font-size: 22px;
-            color: #f5b942;
+        .vault-header h2 {
+            font-size: 20px;
+            color: #ff9f0a;
         }
-        .controls {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .btn {
-            padding: 12px;
+        .btn-lock {
+            background-color: #d9534f;
+            color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 8px 14px;
+            border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
-            text-align: center;
-            transition: 0.2s;
         }
         .btn-upload {
-            background-color: #f5b942;
+            display: block;
+            width: 100%;
+            background-color: #ff9f0a;
             color: #000;
-        }
-        .btn-toggle-vault {
-            background-color: #2a2a2a;
-            color: #fff;
-            border: 1px solid #444;
-        }
-        .btn-toggle-vault.active {
-            background-color: #d9534f;
-            border-color: #d9534f;
+            padding: 14px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
         }
         input[type="file"] {
             display: none;
         }
         .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
         }
         .card {
             background-color: #1e1e1e;
-            border-radius: 10px;
+            border-radius: 8px;
             overflow: hidden;
             border: 1px solid #333;
-            display: flex;
-            flex-direction: column;
         }
         .card img {
             width: 100%;
-            height: 140px;
+            height: 130px;
             object-fit: cover;
-        }
-        .card-actions {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px;
-            background-color: #252525;
-        }
-        .action-btn {
-            padding: 6px 10px;
-            border: none;
-            border-radius: 5px;
-            font-size: 12px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .hide-btn {
-            background-color: #0275d8;
-            color: white;
-        }
-        .unhide-btn {
-            background-color: #5cb85c;
-            color: white;
+            display: block;
         }
         .delete-btn {
-            background-color: #d9534f;
-            color: white;
+            width: 100%;
+            background-color: #2a2a2a;
+            color: #ff6b6b;
+            border: none;
+            padding: 8px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
         }
         .empty-msg {
             text-align: center;
-            color: #888;
+            color: #777;
             grid-column: 1 / -1;
-            padding: 30px 0;
-        }
-        /* PIN Modal */
-        #pinModal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .modal-box {
-            background: #1e1e1e;
-            padding: 25px;
-            border-radius: 12px;
-            width: 85%;
-            max-width: 320px;
-            text-align: center;
-            border: 1px solid #444;
-        }
-        .modal-box input {
-            width: 100%;
-            padding: 12px;
-            margin: 15px 0;
-            border-radius: 6px;
-            border: 1px solid #555;
-            background: #121212;
-            color: #fff;
-            font-size: 18px;
-            text-align: center;
-            letter-spacing: 5px;
+            padding: 40px 0;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1 id="pageTitle">Picha Zangu (Zinazoonekana)</h1>
-    </header>
+    <!-- 1. KIKOKOTOO CHA KAWAIDA (KIINI MACHO) -->
+    <div id="calculatorScreen">
+        <input type="text" class="calc-display" id="display" value="0" readonly>
+        <div class="calc-grid">
+            <button class="calc-btn btn-top" onclick="clearDisplay()">AC</button>
+            <button class="calc-btn btn-top" onclick="deleteLast()">⌫</button>
+            <button class="calc-btn btn-top" onclick="appendValue('%')">%</button>
+            <button class="calc-btn btn-op" onclick="appendValue('/')">÷</button>
 
-    <div class="controls">
-        <label for="imageInput" class="btn btn-upload">+ Ongeza Picha Mpya</label>
-        <input type="file" id="imageInput" accept="image/*" multiple>
+            <button class="calc-btn" onclick="appendValue('7')">7</button>
+            <button class="calc-btn" onclick="appendValue('8')">8</button>
+            <button class="calc-btn" onclick="appendValue('9')">9</button>
+            <button class="calc-btn btn-op" onclick="appendValue('*')">×</button>
 
-        <button id="toggleVaultBtn" class="btn btn-toggle-vault" onclick="handleVaultToggle()">
-            🔒 Fungua Picha Zilizofichwa
-        </button>
-    </div>
+            <button class="calc-btn" onclick="appendValue('4')">4</button>
+            <button class="calc-btn" onclick="appendValue('5')">5</button>
+            <button class="calc-btn" onclick="appendValue('6')">6</button>
+            <button class="calc-btn btn-op" onclick="appendValue('-')">−</button>
 
-    <div class="gallery" id="gallery"></div>
+            <button class="calc-btn" onclick="appendValue('1')">1</button>
+            <button class="calc-btn" onclick="appendValue('2')">2</button>
+            <button class="calc-btn" onclick="appendValue('3')">3</button>
+            <button class="calc-btn btn-op" onclick="appendValue('+')">+</button>
 
-    <!-- Modal ya kuingiza PIN -->
-    <div id="pinModal">
-        <div class="modal-box">
-            <h3 id="modalTitle">Ingiza PIN ya Siri</h3>
-            <p style="font-size: 13px; color: #aaa; margin-top: 5px;" id="modalDesc">PIN ya mwanzo ni: 1234</p>
-            <input type="password" id="pinInput" maxlength="4" placeholder="****">
-            <div style="display: flex; gap: 10px;">
-                <button class="btn" style="flex:1; background:#444; color:#fff;" onclick="closeModal()">Ghairi</button>
-                <button class="btn btn-upload" style="flex:1;" onclick="verifyPin()">Ingia</button>
-            </div>
+            <button class="calc-btn btn-zero" onclick="appendValue('0')">0</button>
+            <button class="calc-btn" onclick="appendValue('.')">.</button>
+            <button class="calc-btn btn-op" onclick="calculate()">=</button>
         </div>
     </div>
 
-    <script>
-        let photos = JSON.parse(localStorage.getItem('vault_photos')) || [];
-        let viewingHidden = false;
-        const SECRET_PIN = "1234"; // Unaweza kubadili namba hii ya siri
+    <!-- 2. VAULT YA SIRI (INAFUNGUKA UKIWEKA PIN + =) -->
+    <div id="vaultScreen">
+        <div class="vault-header">
+            <h2>🔒 Picha Zangu za Siri</h2>
+            <button class="btn-lock" onclick="lockVault()">Funga (Lock)</button>
+        </div>
 
+        <label for="imageInput" class="btn-upload">+ Ficha Picha Mpya Hapa</label>
+        <input type="file" id="imageInput" accept="image/*" multiple>
+
+        <div class="gallery" id="gallery"></div>
+    </div>
+
+    <script>
+        const SECRET_PIN = "1234"; // Badili hii iwe namba yako ya siri
+        const display = document.getElementById('display');
+        const calculatorScreen = document.getElementById('calculatorScreen');
+        const vaultScreen = document.getElementById('vaultScreen');
         const imageInput = document.getElementById('imageInput');
         const gallery = document.getElementById('gallery');
-        const toggleVaultBtn = document.getElementById('toggleVaultBtn');
-        const pageTitle = document.getElementById('pageTitle');
 
-        // Kupakia picha mpya
+        let photos = JSON.parse(localStorage.getItem('secret_calc_photos')) || [];
+
+        // --- KAZI ZA KIKOKOTOO ---
+        function appendValue(val) {
+            if (display.value === "0" || display.value === "Error") {
+                display.value = val;
+            } else {
+                display.value += val;
+            }
+        }
+
+        function clearDisplay() {
+            display.value = "0";
+        }
+
+        function deleteLast() {
+            if (display.value.length > 1) {
+                display.value = display.value.slice(0, -1);
+            } else {
+                display.value = "0";
+            }
+        }
+
+        function calculate() {
+            // Angalia kama aliyeandika ameingiza PIN ya siri
+            if (display.value === SECRET_PIN) {
+                openVault();
+                return;
+            }
+
+            // Kama siyo PIN, fanya hesabu ya kawaida
+            try {
+                let result = eval(display.value);
+                display.value = result;
+            } catch (e) {
+                display.value = "Error";
+            }
+        }
+
+        // --- KAZI ZA VAULT YA SIRI ---
+        function openVault() {
+            display.value = "0";
+            calculatorScreen.style.display = "none";
+            vaultScreen.style.display = "block";
+            document.body.style.alignItems = "flex-start";
+            renderGallery();
+        }
+
+        function lockVault() {
+            vaultScreen.style.display = "none";
+            calculatorScreen.style.display = "block";
+            document.body.style.alignItems = "center";
+            display.value = "0";
+        }
+
         imageInput.addEventListener('change', function(e) {
             const files = e.target.files;
             for (let file of files) {
@@ -189,8 +269,7 @@
                 reader.onload = function(event) {
                     photos.push({
                         id: Date.now() + Math.random(),
-                        src: event.target.result,
-                        hidden: viewingHidden // Kama yupo kwenye vault, picha inafichwa moja kwa moja
+                        src: event.target.result
                     });
                     saveAndRender();
                 };
@@ -199,100 +278,38 @@
             imageInput.value = '';
         });
 
-        // Kubadili hali ya picha (Hide / Unhide)
-        function toggleHide(id) {
-            photos = photos.map(photo => {
-                if (photo.id === id) {
-                    return { ...photo, hidden: !photo.hidden };
-                }
-                return photo;
-            });
-            saveAndRender();
-        }
-
-        // Kufuta picha
         function deletePhoto(id) {
-            if (confirm("Una uhakika unataka kufuta picha hii kabisa?")) {
-                photos = photos.filter(photo => photo.id !== id);
+            if (confirm("Futa picha hii kabisa?")) {
+                photos = photos.filter(p => p.id !== id);
                 saveAndRender();
             }
         }
 
-        // Kufungua au kufunga sehemu ya siri
-        function handleVaultToggle() {
-            if (viewingHidden) {
-                viewingHidden = false;
-                updateUI();
-            } else {
-                document.getElementById('pinInput').value = '';
-                document.getElementById('pinModal').style.display = 'flex';
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('pinModal').style.display = 'none';
-        }
-
-        function verifyPin() {
-            const entered = document.getElementById('pinInput').value;
-            if (entered === SECRET_PIN) {
-                closeModal();
-                viewingHidden = true;
-                updateUI();
-            } else {
-                alert("PIN uliyoingiza si sahihi!");
-            }
-        }
-
-        function updateUI() {
-            if (viewingHidden) {
-                pageTitle.innerText = "🔒 Picha Zilizofichwa (Siri)";
-                toggleVaultBtn.innerText = "🔓 Rudi Kwenye Picha za Kawaida";
-                toggleVaultBtn.classList.add('active');
-            } else {
-                pageTitle.innerText = "Picha Zangu (Zinazoonekana)";
-                toggleVaultBtn.innerText = "🔒 Fungua Picha Zilizofichwa";
-                toggleVaultBtn.classList.remove('active');
-            }
-            renderGallery();
-        }
-
         function saveAndRender() {
             try {
-                localStorage.setItem('vault_photos', JSON.stringify(photos));
+                localStorage.setItem('secret_calc_photos', JSON.stringify(photos));
             } catch (e) {
-                alert("Kumbukumbu ya kivinjari imejaa! Futa baadhi ya picha au tumia picha ndogo.");
+                alert("Nafasi ya kuhifadhi imejaa! Futa baadhi ya picha.");
             }
             renderGallery();
         }
 
         function renderGallery() {
             gallery.innerHTML = '';
-            const filtered = photos.filter(p => p.hidden === viewingHidden);
-
-            if (filtered.length === 0) {
-                gallery.innerHTML = `<div class="empty-msg">${viewingHidden ? 'Hakuna picha iliyofichwa bado.' : 'Hakuna picha hapa. Bonyeza "+ Ongeza Picha Mpya" kuanza.'}</div>`;
+            if (photos.length === 0) {
+                gallery.innerHTML = '<div class="empty-msg">Hakuna picha iliyofichwa bado.<br>Bonyeza kitufe cha njano hapo juu kuongeza.</div>';
                 return;
             }
-
-            filtered.forEach(photo => {
+            photos.forEach(photo => {
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.innerHTML = `
-                    <img src="${photo.src}" alt="Picha">
-                    <div class="card-actions">
-                        <button class="action-btn ${photo.hidden ? 'unhide-btn' : 'hide-btn'}" onclick="toggleHide(${photo.id})">
-                            ${photo.hidden ? 'Onyesha (Unhide)' : 'Ficha (Hide)'}
-                        </button>
-                        <button class="action-btn delete-btn" onclick="deletePhoto(${photo.id})">Futa</button>
-                    </div>
+                    <img src="${photo.src}" alt="Secret">
+                    <button class="delete-btn" onclick="deletePhoto(${photo.id})">Futa Picha</button>
                 `;
                 gallery.appendChild(card);
             });
         }
-
-        // Anza kuonyesha picha
-        renderGallery();
     </script>
 </body>
 </html>
