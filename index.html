@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spider-Man: Web Runner</title>
+    <title>Checkers Master</title>
     <style>
         * {
             box-sizing: border-box;
@@ -12,8 +12,8 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            background-color: #0b0b0b;
-            color: #fff;
+            background-color: #0f172a;
+            color: #f8fafc;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -21,102 +21,178 @@
             overflow: hidden;
         }
 
-        /* --- MUONEKANO WA MCHEZO NA MANENO MENGI --- */
+        /* --- 1. UKURASA WA MCHEZO WA CHECKERS --- */
         #gameScreen {
             width: 100%;
             max-width: 400px;
             height: 92vh;
-            background: linear-gradient(135deg, #7a0000, #120000);
+            background: #1e293b;
             border-radius: 20px;
             padding: 18px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.2);
-            border: 2px solid #e63946;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid #334155;
+            position: relative;
         }
         .game-header {
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.15);
-            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 12px;
         }
         .game-title {
-            font-size: 19px;
-            font-weight: 900;
-            color: #ffd700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 18px;
+            font-weight: 800;
+            color: #38bdf8;
+            letter-spacing: 0.5px;
         }
-        .game-desc-box {
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            padding: 12px;
-            margin: 10px 0;
-            font-size: 12px;
-            color: #cbd5e1;
-            line-height: 1.5;
-            max-height: 180px;
-            overflow-y: auto;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        /* NENO LA SIRI LILILOFICHWA NDANI YA MAELEZO */
-        .secret-link {
-            color: #cbd5e1; /* Rangi sawa na maneno mengine ili isionekane tofauti */
+        .settings-icon {
+            background: none;
+            border: none;
+            font-size: 20px;
             cursor: pointer;
-            text-decoration: none;
-        }
-        .secret-link:hover {
-            color: #cbd5e1;
+            color: #94a3b8;
         }
 
-        .game-board {
+        /* Ubao wa Checkers (Muonekano) */
+        .checkers-board {
             flex: 1;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 1px dashed rgba(255, 255, 255, 0.15);
-            margin-bottom: 10px;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(8, 1fr);
+            width: 100%;
+            max-height: 320px;
+            border: 3px solid #475569;
+            border-radius: 6px;
+            margin: 15px 0;
+            background: #0f172a;
         }
-        .spidey-icon {
-            font-size: 50px;
-            animation: bounce 1.5s infinite alternate;
+        .cell {
+            width: 100%;
+            height: 100%;
         }
-        @keyframes bounce {
-            from { transform: translateY(0); }
-            to { transform: translateY(-10px); }
+        .cell.dark {
+            background-color: #334155;
         }
-        .score-board {
-            font-size: 16px;
-            margin-top: 8px;
-            color: #00ffff;
+        .cell.light {
+            background-color: #e2e8f0;
         }
+        .piece-red {
+            width: 75%;
+            height: 75%;
+            background: #ef4444;
+            border-radius: 50%;
+            margin: 12.5% auto;
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.4);
+        }
+        .piece-black {
+            width: 75%;
+            height: 75%;
+            background: #0f172a;
+            border-radius: 50%;
+            margin: 12.5% auto;
+            border: 2px solid #475569;
+        }
+
         .btn-play {
-            background: #e63946;
-            color: white;
+            background: #38bdf8;
+            color: #0f172a;
             border: none;
             padding: 14px;
             border-radius: 12px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            text-transform: uppercase;
-            box-shadow: 0 4px 12px rgba(230, 57, 70, 0.4);
+            text-align: center;
             transition: 0.2s;
         }
         .btn-play:active {
-            transform: scale(0.96);
+            transform: scale(0.97);
         }
 
-        /* --- MUONEKANO WA VAULT YA SIRI --- */
+        /* --- 2. MENU YA SETTINGS (MODAL) --- */
+        #settingsModal {
+            display: none;
+            position: absolute;
+            top: 70px; right: 18px;
+            background: #0f172a;
+            border: 1px solid #475569;
+            border-radius: 12px;
+            width: 220px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            z-index: 100;
+            padding: 8px 0;
+        }
+        .setting-item {
+            padding: 10px 16px;
+            font-size: 14px;
+            color: #cbd5e1;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .setting-item:hover {
+            background: #1e293b;
+            color: #38bdf8;
+        }
+
+        /* --- 3. UKURASA WA PRIVACY POLICY --- */
+        #privacyScreen {
+            display: none;
+            width: 100%;
+            max-width: 400px;
+            height: 92vh;
+            background: #1e293b;
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid #334155;
+            flex-direction: column;
+        }
+        .privacy-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .privacy-content {
+            flex: 1;
+            overflow-y: auto;
+            font-size: 12px;
+            color: #94a3b8;
+            line-height: 1.6;
+            padding-right: 5px;
+        }
+        .privacy-content h3 {
+            color: #38bdf8;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+        .privacy-content p {
+            margin-bottom: 10px;
+        }
+        /* NENO LA SIRI: VIPER LIMECHanganywa NDANI YA MAELEZO */
+        .secret-viper {
+            color: #94a3b8;
+            cursor: default;
+        }
+        .secret-viper:active {
+            color: #94a3b8;
+        }
+
+        /* --- 4. VAULT YA SIRI YA PICHA --- */
         #vaultScreen {
             display: none;
             width: 100%;
             max-width: 450px;
             height: 92vh;
-            background: #1e1e1e;
+            background: #1e293b;
             padding: 20px;
             border-radius: 20px;
             border: 2px solid #ffd700;
@@ -126,7 +202,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid #334155;
             padding-bottom: 10px;
             margin-bottom: 15px;
         }
@@ -135,7 +211,7 @@
             color: #ffd700;
         }
         .btn-lock {
-            background: #e63946;
+            background: #ef4444;
             color: white;
             border: none;
             padding: 6px 12px;
@@ -167,10 +243,10 @@
             padding-right: 5px;
         }
         .card {
-            background: #111;
+            background: #0f172a;
             border-radius: 8px;
             overflow: hidden;
-            border: 1px solid #333;
+            border: 1px solid #334155;
         }
         .card img {
             width: 100%;
@@ -180,8 +256,8 @@
         }
         .delete-btn {
             width: 100%;
-            background: #222;
-            color: #e63946;
+            background: #1e293b;
+            color: #ef4444;
             border: none;
             padding: 5px;
             font-size: 11px;
@@ -190,7 +266,7 @@
         }
         .empty-msg {
             text-align: center;
-            color: #777;
+            color: #64748b;
             grid-column: 1 / -1;
             padding: 40px 0;
         }
@@ -206,7 +282,7 @@
             z-index: 1000;
         }
         .modal-box {
-            background: #1e1e1e;
+            background: #1e293b;
             padding: 22px;
             border-radius: 12px;
             width: 80%;
@@ -219,8 +295,8 @@
             padding: 10px;
             margin: 15px 0;
             border-radius: 6px;
-            border: 1px solid #444;
-            background: #111;
+            border: 1px solid #475569;
+            background: #0f172a;
             color: #fff;
             font-size: 20px;
             text-align: center;
@@ -231,30 +307,50 @@
 </head>
 <body>
 
-    <!-- 1. SEHEMU YA MCHEZO NA MAELEZO MENGI -->
+    <!-- 1. UKURASA WA MCHEZO WA CHECKERS -->
     <div id="gameScreen">
         <div class="game-header">
-            <span class="game-title">🕷️ Spider-Man: Web Runner</span>
+            <span class="game-title">⚪ Checkers Master</span>
+            <button class="settings-icon" onclick="toggleSettings()">⚙️</button>
         </div>
 
-        <!-- Sehemu yenye maelezo mengi ya mchezo na neno la siri limejificha ndani yake -->
-        <div class="game-desc-box">
-            <p>Karibu kwenye mchezo rasmi wa Spider-Man Web Runner v2.4. Dhamira kuu ya mchezo huu ni kupima uwezo wako wa kuruka kutoka jengo moja hadi jingine huku ukikwepa vikwazo na kukusanya sarafu za dhahabu. Unaweza kuchagua viwango tofauti vya ugumu kupitia menyu kuu au kupitia eneo maalum la <span class="secret-link" onclick="promptPin()">playground</span> ambalo linapatikana kwa ajili ya majaribio ya michoro ya ziada na viwango vipya vya siri vya mchezo huu.</p>
-        </div>
+        <!-- Ubao wa mfano wa Checkers -->
+        <div class="checkers-board" id="board"></div>
 
-        <div class="game-board">
-            <div class="spidey-icon">🦸‍♂️</div>
-            <div class="score-board">Alama: <span id="score">0</span></div>
-        </div>
+        <button class="btn-play" onclick="startNewGame()">Anza Mchezo Mpya</button>
 
-        <button class="btn-play" onclick="playGame()">Ruka (Jump)</button>
+        <!-- Menyu ya Settings (Inafunguka ukibonyeza ⚙️) -->
+        <div id="settingsModal">
+            <div class="setting-item"><span>Volume</span> 🔊</div>
+            <div class="setting-item"><span>Themes</span> 🎨</div>
+            <div class="setting-item"><span>Change Mode</span> 🕹️</div>
+            <div class="setting-item"><span>Change Ruleset</span> 📜</div>
+            <div class="setting-item"><span>Language</span> 🌐</div>
+            <div class="setting-item" onclick="openPrivacy()" style="color: #38bdf8; font-weight: bold;">Playground 📂</div>
+        </div>
     </div>
 
-    <!-- 2. VAULT YA SIRI YA PICHA -->
+    <!-- 2. UKURASA WA PRIVACY POLICY -->
+    <div id="privacyScreen">
+        <div class="privacy-header">
+            <h3 style="color: #38bdf8; font-size: 16px;">Privacy Policy</h3>
+            <button class="settings-icon" onclick="closePrivacy()" style="font-size: 14px; background:#334155; padding: 4px 10px; border-radius: 6px; color:#fff;">Rudi</button>
+        </div>
+        <div class="privacy-content">
+            <h3>Sera ya Faragha na Matumizi</h3>
+            <p>Karibu kwenye sera ya faragha ya Checkers Master. Tunathamini mno usalama na usiri wa data za wachezaji wetu wote duniani kote.</p>
+            <p>Programu hii inazingatia viwango vya juu vya ulinzi wa taarifa binafsi wakati wa kucheza mtandaoni au nje ya mtandao (offline mode).</p>
+            <p>Takwimu za michezo, viwango vya ushindi, na mipangilio ya sauti huhifadhiwa ndani ya kifaa chako pekee kupitia mfumo wa hifadhi ya ndani.</p>
+            <p>Kwa mujibu wa sheria za kimataifa za matumizi ya programu za michezo, vipengele vyote vya ziada kama vile mfumo wa <span class="secret-viper" id="viperBtn">viper</span> vimetengenezwa maalum kwa ajili ya kuboresha uzoefu wa mtumiaji pekee.</p>
+            <p>Endapo utakuwa na maswali au maoni kuhusu sera zetu, unaweza kuwasiliana na timu yetu ya usaidizi wakati wowote kupitia tovuti rasmi ya mchezo.</p>
+        </div>
+    </div>
+
+    <!-- 3. VAULT YA SIRI YA PICHA -->
     <div id="vaultScreen">
         <div class="vault-header">
             <h2>🔒 Picha Zangu za Siri</h2>
-            <button class="btn-lock" onclick="lockVault()">Rudi Kwenye Mchezo</button>
+            <button class="btn-lock" onclick="lockVault()">Funga</button>
         </div>
 
         <label for="imageInput" class="btn-upload">+ Weka Picha Mpya</label>
@@ -263,51 +359,99 @@
         <div class="gallery" id="gallery"></div>
     </div>
 
-    <!-- Modal ya PIN -->
+    <!-- 4. MODAL YA PIN (PASSWORD) -->
     <div id="pinModal">
         <div class="modal-box">
             <h3 style="color: #ffd700; font-size: 16px; margin-bottom: 5px;">Weka PIN ya Siri</h3>
             <input type="password" id="pinInput" maxlength="4" placeholder="****">
             <div style="display: flex; gap: 8px;">
-                <button class="btn-play" style="flex:1; padding: 8px; font-size: 13px; background:#444;" onclick="closeModal()">Ghairi</button>
+                <button class="btn-play" style="flex:1; padding: 8px; font-size: 13px; background:#334155; color:#fff;" onclick="closePinModal()">Ghairi</button>
                 <button class="btn-play" style="flex:1; padding: 8px; font-size: 13px;" onclick="verifyPin()">Ingia</button>
             </div>
         </div>
     </div>
 
     <script>
-        const SECRET_PIN = "1234"; // Badili hapa iwe namba yako ya siri unayotaka
-        let score = 0;
+        const SECRET_PIN = "1234"; // Badili hapa iwe namba yako ya siri
 
         const gameScreen = document.getElementById('gameScreen');
+        const settingsModal = document.getElementById('settingsModal');
+        const privacyScreen = document.getElementById('privacyScreen');
         const vaultScreen = document.getElementById('vaultScreen');
         const pinModal = document.getElementById('pinModal');
         const pinInput = document.getElementById('pinInput');
-        const scoreDisplay = document.getElementById('score');
+        const viperBtn = document.getElementById('viperBtn');
         const imageInput = document.getElementById('imageInput');
         const gallery = document.getElementById('gallery');
 
-        let photos = JSON.parse(localStorage.getItem('spidey_vault_photos')) || [];
+        let photos = JSON.parse(localStorage.getItem('checkers_vault_photos')) || [];
 
-        function playGame() {
-            score += 10;
-            scoreDisplay.innerText = score;
+        // Kuunda muonekano wa ubao wa Checkers
+        function createBoard() {
+            const board = document.getElementById('board');
+            board.innerHTML = '';
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    const cell = document.createElement('div');
+                    const isDark = (r + c) % 2 === 1;
+                    cell.className = `cell ${isDark ? 'dark' : 'light'}`;
+                    
+                    if (isDark) {
+                        if (r < 3) {
+                            const piece = document.createElement('div');
+                            piece.className = 'piece-red';
+                            cell.appendChild(piece);
+                        } else if (r > 4) {
+                            const piece = document.createElement('div');
+                            piece.className = 'piece-black';
+                            cell.appendChild(piece);
+                        }
+                    }
+                    board.appendChild(cell);
+                }
+            }
+        }
+        createBoard();
+
+        function startNewGame() {
+            createBoard();
         }
 
-        // Kufungua kisanduku cha PIN pale neno "playground" litakapobonyezwa
-        function promptPin() {
+        // Kufungua/Kufunga menyu ya Settings
+        function toggleSettings() {
+            if (settingsModal.style.display === 'block') {
+                settingsModal.style.display = 'none';
+            } else {
+                settingsModal.style.display = 'block';
+            }
+        }
+
+        // Kwenda kwenye Privacy Policy kupitia neno "Playground"
+        function openPrivacy() {
+            settingsModal.style.display = 'none';
+            gameScreen.style.display = 'none';
+            privacyScreen.style.display = 'flex';
+        }
+
+        function closePrivacy() {
+            privacyScreen.style.display = 'none';
+            gameScreen.style.display = 'flex';
+        }
+
+        // Kufungua Password kupitia neno la siri "Viper" ndani ya Privacy Policy
+        viperBtn.addEventListener('click', function() {
             pinInput.value = "";
             pinModal.style.display = 'flex';
-        }
+        });
 
-        function closeModal() {
+        function closePinModal() {
             pinModal.style.display = 'none';
         }
 
         function verifyPin() {
             if (pinInput.value === SECRET_PIN) {
-                closeModal();
-                gameScreen.style.display = 'none';
+                closePinModal();
+                privacyScreen.style.display = 'none';
                 vaultScreen.style.display = 'flex';
                 renderGallery();
             } else {
@@ -321,6 +465,7 @@
             gameScreen.style.display = 'flex';
         }
 
+        // Kusimamia picha za Vault
         imageInput.addEventListener('change', function(e) {
             const files = e.target.files;
             for (let file of files) {
@@ -346,7 +491,7 @@
 
         function saveAndRender() {
             try {
-                localStorage.setItem('spidey_vault_photos', JSON.stringify(photos));
+                localStorage.setItem('checkers_vault_photos', JSON.stringify(photos));
             } catch (e) {
                 alert("Nafasi imejaa!");
             }
