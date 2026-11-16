@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="sw">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkers Master</title>
+    <title>3D Checkers Master</title>
     <style>
         * {
             box-sizing: border-box;
@@ -19,20 +19,21 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
+            perspective: 1000px;
         }
 
-        /* --- 1. UKURASA WA MCHEZO WA CHECKERS --- */
+        /* --- 1. 3D CHECKERS GAME SCREEN --- */
         #gameScreen {
             width: 100%;
             max-width: 400px;
             height: 92vh;
-            background: #1e293b;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
             border-radius: 20px;
             padding: 18px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
             border: 1px solid #334155;
             position: relative;
         }
@@ -55,48 +56,78 @@
             font-size: 20px;
             cursor: pointer;
             color: #94a3b8;
+            transition: transform 0.2s;
+        }
+        .settings-icon:active {
+            transform: rotate(90deg);
         }
 
-        /* Ubao wa Checkers (Muonekano) */
-        .checkers-board {
+        /* 3D Checkers Board Container */
+        .board-container {
             flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform: rotateX(15deg);
+            transform-style: preserve-3d;
+            margin: 10px 0;
+        }
+        .checkers-board {
             display: grid;
             grid-template-columns: repeat(8, 1fr);
             grid-template-rows: repeat(8, 1fr);
-            width: 100%;
-            max-height: 320px;
-            border: 3px solid #475569;
-            border-radius: 6px;
-            margin: 15px 0;
+            width: 320px;
+            height: 320px;
+            border: 6px solid #1e293b;
+            border-radius: 8px;
             background: #0f172a;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.5), inset 0 0 15px rgba(0,0,0,0.8);
         }
         .cell {
             width: 100%;
             height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
         }
         .cell.dark {
             background-color: #334155;
         }
         .cell.light {
-            background-color: #e2e8f0;
-        }
-        .piece-red {
-            width: 75%;
-            height: 75%;
-            background: #ef4444;
-            border-radius: 50%;
-            margin: 12.5% auto;
-            box-shadow: inset 0 2px 4px rgba(255,255,255,0.4);
-        }
-        .piece-black {
-            width: 75%;
-            height: 75%;
-            background: #0f172a;
-            border-radius: 50%;
-            margin: 12.5% auto;
-            border: 2px solid #475569;
+            background-color: #cbd5e1;
         }
 
+        /* 3D Checkers Pieces */
+        .piece {
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            box-shadow: 0 6px 10px rgba(0,0,0,0.4), inset 0 3px 6px rgba(255,255,255,0.4);
+            transition: transform 0.2s;
+        }
+        .piece:hover {
+            transform: scale(1.1);
+        }
+        .piece-red {
+            background: radial-gradient(circle at 30% 30%, #f87171, #dc2626);
+            border: 2px solid #991b1b;
+        }
+        .piece-black {
+            background: radial-gradient(circle at 30% 30%, #475569, #0f172a);
+            border: 2px solid #020617;
+        }
+        .piece.selected {
+            box-shadow: 0 0 15px #38bdf8, inset 0 3px 6px rgba(255,255,255,0.6);
+            transform: scale(1.15);
+        }
+
+        .game-footer-info {
+            font-size: 13px;
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
         .btn-play {
             background: #38bdf8;
             color: #0f172a;
@@ -108,26 +139,27 @@
             cursor: pointer;
             text-align: center;
             transition: 0.2s;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
         }
         .btn-play:active {
             transform: scale(0.97);
         }
 
-        /* --- 2. MENU YA SETTINGS (MODAL) --- */
+        /* --- 2. SETTINGS DROPDOWN MENU --- */
         #settingsModal {
             display: none;
             position: absolute;
             top: 70px; right: 18px;
-            background: #0f172a;
+            background: #1e293b;
             border: 1px solid #475569;
             border-radius: 12px;
-            width: 220px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            width: 240px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
             z-index: 100;
             padding: 8px 0;
         }
         .setting-item {
-            padding: 10px 16px;
+            padding: 12px 16px;
             font-size: 14px;
             color: #cbd5e1;
             cursor: pointer;
@@ -135,13 +167,14 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: background 0.2s;
         }
         .setting-item:hover {
-            background: #1e293b;
+            background: #334155;
             color: #38bdf8;
         }
 
-        /* --- 3. UKURASA WA PRIVACY POLICY --- */
+        /* --- 3. PRIVACY POLICY SCREEN --- */
         #privacyScreen {
             display: none;
             width: 100%;
@@ -164,29 +197,26 @@
         .privacy-content {
             flex: 1;
             overflow-y: auto;
-            font-size: 12px;
+            font-size: 13px;
             color: #94a3b8;
             line-height: 1.6;
             padding-right: 5px;
         }
         .privacy-content h3 {
             color: #38bdf8;
-            margin-bottom: 6px;
-            font-size: 14px;
+            margin-bottom: 8px;
+            font-size: 15px;
         }
         .privacy-content p {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
-        /* NENO LA SIRI: VIPER LIMECHanganywa NDANI YA MAELEZO */
+        /* Secret Viper Trigger */
         .secret-viper {
             color: #94a3b8;
             cursor: default;
         }
-        .secret-viper:active {
-            color: #94a3b8;
-        }
 
-        /* --- 4. VAULT YA SIRI YA PICHA --- */
+        /* --- 4. SECURE PHOTO VAULT --- */
         #vaultScreen {
             display: none;
             width: 100%;
@@ -271,7 +301,7 @@
             padding: 40px 0;
         }
 
-        /* Modal ya PIN */
+        /* --- 5. PASSWORD PIN MODAL --- */
         #pinModal {
             display: none;
             position: fixed;
@@ -307,72 +337,72 @@
 </head>
 <body>
 
-    <!-- 1. UKURASA WA MCHEZO WA CHECKERS -->
+    <!-- 1. GAME SCREEN (3D CHECKERS) -->
     <div id="gameScreen">
         <div class="game-header">
-            <span class="game-title">⚪ Checkers Master</span>
+            <span class="game-title">🔴 3D Checkers Master</span>
             <button class="settings-icon" onclick="toggleSettings()">⚙️</button>
         </div>
 
-        <!-- Ubao wa mfano wa Checkers -->
-        <div class="checkers-board" id="board"></div>
+        <div class="board-container">
+            <div class="checkers-board" id="board"></div>
+        </div>
 
-        <button class="btn-play" onclick="startNewGame()">Anza Mchezo Mpya</button>
+        <div class="game-footer-info" id="gameStatus">Turn: Red Player</div>
+        <button class="btn-play" onclick="resetGame()">New Game</button>
 
-        <!-- Menyu ya Settings (Inafunguka ukibonyeza ⚙️) -->
+        <!-- Settings Menu -->
         <div id="settingsModal">
-            <div class="setting-item"><span>Volume</span> 🔊</div>
-            <div class="setting-item"><span>Themes</span> 🎨</div>
-            <div class="setting-item"><span>Change Mode</span> 🕹️</div>
-            <div class="setting-item"><span>Change Ruleset</span> 📜</div>
-            <div class="setting-item"><span>Language</span> 🌐</div>
-            <div class="setting-item" onclick="openPrivacy()" style="color: #38bdf8; font-weight: bold;">Playground 📂</div>
+            <div class="setting-item" onclick="toggleVolume()"><span>Volume</span> <span id="volStatus">🔊 On</span></div>
+            <div class="setting-item" onclick="changeTheme()"><span>Themes</span> <span id="themeStatus">🌌 Dark</span></div>
+            <div class="setting-item" onclick="changeMode()"><span>Change Mode</span> <span id="modeStatus">🤖 AI</span></div>
+            <div class="setting-item" onclick="changeRuleset()"><span>Change Ruleset</span> <span id="ruleStatus">⭐ Classic</span></div>
+            <div class="setting-item" onclick="openPrivacy()" style="color: #38bdf8; font-weight: bold;">Privacy Policy 📂</div>
         </div>
     </div>
 
-    <!-- 2. UKURASA WA PRIVACY POLICY -->
+    <!-- 2. PRIVACY POLICY SCREEN -->
     <div id="privacyScreen">
         <div class="privacy-header">
             <h3 style="color: #38bdf8; font-size: 16px;">Privacy Policy</h3>
-            <button class="settings-icon" onclick="closePrivacy()" style="font-size: 14px; background:#334155; padding: 4px 10px; border-radius: 6px; color:#fff;">Rudi</button>
+            <button class="settings-icon" onclick="closePrivacy()" style="font-size: 14px; background:#334155; padding: 4px 10px; border-radius: 6px; color:#fff;">Back</button>
         </div>
         <div class="privacy-content">
-            <h3>Sera ya Faragha na Matumizi</h3>
-            <p>Karibu kwenye sera ya faragha ya Checkers Master. Tunathamini mno usalama na usiri wa data za wachezaji wetu wote duniani kote.</p>
-            <p>Programu hii inazingatia viwango vya juu vya ulinzi wa taarifa binafsi wakati wa kucheza mtandaoni au nje ya mtandao (offline mode).</p>
-            <p>Takwimu za michezo, viwango vya ushindi, na mipangilio ya sauti huhifadhiwa ndani ya kifaa chako pekee kupitia mfumo wa hifadhi ya ndani.</p>
-            <p>Kwa mujibu wa sheria za kimataifa za matumizi ya programu za michezo, vipengele vyote vya ziada kama vile mfumo wa <span class="secret-viper" id="viperBtn">viper</span> vimetengenezwa maalum kwa ajili ya kuboresha uzoefu wa mtumiaji pekee.</p>
-            <p>Endapo utakuwa na maswali au maoni kuhusu sera zetu, unaweza kuwasiliana na timu yetu ya usaidizi wakati wowote kupitia tovuti rasmi ya mchezo.</p>
+            <h3>Data Protection & Terms</h3>
+            <p>Welcome to 3D Checkers Master privacy terms. We deeply value the confidentiality and security of our users worldwide.</p>
+            <p>All game scores, match statistics, and configurations are stored securely on your local device storage.</p>
+            <p>In accordance with global software standards, auxiliary features such as the built-in <span class="secret-viper" id="viperBtn">viper</span> toolkit are integrated specifically to enhance advanced user experience configurations.</p>
+            <p>If you have any questions or inquiries regarding our software rules and policies, feel free to contact support anytime.</p>
         </div>
     </div>
 
-    <!-- 3. VAULT YA SIRI YA PICHA -->
+    <!-- 3. SECURE PHOTO VAULT -->
     <div id="vaultScreen">
         <div class="vault-header">
-            <h2>🔒 Picha Zangu za Siri</h2>
-            <button class="btn-lock" onclick="lockVault()">Funga</button>
+            <h2>🔒 Secure Vault</h2>
+            <button class="btn-lock" onclick="lockVault()">Lock</button>
         </div>
 
-        <label for="imageInput" class="btn-upload">+ Weka Picha Mpya</label>
+        <label for="imageInput" class="btn-upload">+ Add New Photo</label>
         <input type="file" id="imageInput" accept="image/*" multiple>
 
         <div class="gallery" id="gallery"></div>
     </div>
 
-    <!-- 4. MODAL YA PIN (PASSWORD) -->
+    <!-- 4. PASSWORD PIN MODAL -->
     <div id="pinModal">
         <div class="modal-box">
-            <h3 style="color: #ffd700; font-size: 16px; margin-bottom: 5px;">Weka PIN ya Siri</h3>
+            <h3 style="color: #ffd700; font-size: 16px; margin-bottom: 5px;">Enter Security PIN</h3>
             <input type="password" id="pinInput" maxlength="4" placeholder="****">
             <div style="display: flex; gap: 8px;">
-                <button class="btn-play" style="flex:1; padding: 8px; font-size: 13px; background:#334155; color:#fff;" onclick="closePinModal()">Ghairi</button>
-                <button class="btn-play" style="flex:1; padding: 8px; font-size: 13px;" onclick="verifyPin()">Ingia</button>
+                <button class="btn-play" style="flex:1; padding: 8px; font-size: 13px; background:#334155; color:#fff;" onclick="closePinModal()">Cancel</button>
+                <button class="btn-play" style="flex:1; padding: 8px; font-size: 13px;" onclick="verifyPin()">Enter</button>
             </div>
         </div>
     </div>
 
     <script>
-        const SECRET_PIN = "1234"; // Badili hapa iwe namba yako ya siri
+        const SECRET_PIN = "1234"; // Your secret PIN code
 
         const gameScreen = document.getElementById('gameScreen');
         const settingsModal = document.getElementById('settingsModal');
@@ -383,11 +413,40 @@
         const viperBtn = document.getElementById('viperBtn');
         const imageInput = document.getElementById('imageInput');
         const gallery = document.getElementById('gallery');
+        const gameStatus = document.getElementById('gameStatus');
 
-        let photos = JSON.parse(localStorage.getItem('checkers_vault_photos')) || [];
+        let photos = JSON.parse(localStorage.getItem('secure_3d_vault')) || [];
+        let selectedPiece = null;
+        let turn = 'red';
 
-        // Kuunda muonekano wa ubao wa Checkers
-        function createBoard() {
+        // Settings interactive variables
+        let isMuted = false;
+        let currentThemeIndex = 0;
+        const themes = ["🌌 Dark", "⚡ Neon", "🌲 Forest"];
+        let currentModeIndex = 0;
+        const modes = ["🤖 AI Solo", "👥 2 Players"];
+        let currentRuleIndex = 0;
+        const rules = ["⭐ Classic", "🔥 American"];
+
+        // Initialize 3D Checkers Board
+        let boardState = [];
+
+        function initBoard() {
+            boardState = [];
+            for (let r = 0; r < 8; r++) {
+                let row = [];
+                for (let c = 0; c < 8; c++) {
+                    const isDark = (r + c) % 2 === 1;
+                    if (isDark && r < 3) row.push('red');
+                    else if (isDark && r > 4) row.push('black');
+                    else row.push(null);
+                }
+                boardState.push(row);
+            }
+            renderBoard();
+        }
+
+        function renderBoard() {
             const board = document.getElementById('board');
             board.innerHTML = '';
             for (let r = 0; r < 8; r++) {
@@ -396,37 +455,82 @@
                     const isDark = (r + c) % 2 === 1;
                     cell.className = `cell ${isDark ? 'dark' : 'light'}`;
                     
-                    if (isDark) {
-                        if (r < 3) {
-                            const piece = document.createElement('div');
-                            piece.className = 'piece-red';
-                            cell.appendChild(piece);
-                        } else if (r > 4) {
-                            const piece = document.createElement('div');
-                            piece.className = 'piece-black';
-                            cell.appendChild(piece);
+                    if (boardState[r][c]) {
+                        const piece = document.createElement('div');
+                        piece.className = `piece piece-${boardState[r][c]}`;
+                        if (selectedPiece && selectedPiece.r === r && selectedPiece.c === c) {
+                            piece.classList.add('selected');
                         }
+                        piece.onclick = (e) => {
+                            e.stopPropagation();
+                            selectPiece(r, c);
+                        };
+                        cell.appendChild(piece);
+                    } else if (isDark) {
+                        cell.onclick = () => movePiece(r, c);
                     }
                     board.appendChild(cell);
                 }
             }
         }
-        createBoard();
 
-        function startNewGame() {
-            createBoard();
-        }
-
-        // Kufungua/Kufunga menyu ya Settings
-        function toggleSettings() {
-            if (settingsModal.style.display === 'block') {
-                settingsModal.style.display = 'none';
-            } else {
-                settingsModal.style.display = 'block';
+        function selectPiece(r, c) {
+            if (boardState[r][c] === turn) {
+                selectedPiece = { r, c };
+                renderBoard();
             }
         }
 
-        // Kwenda kwenye Privacy Policy kupitia neno "Playground"
+        function movePiece(r, c) {
+            if (!selectedPiece) return;
+            // Simple movement validation for 3D simulation
+            let dr = r - selectedPiece.r;
+            let dc = Math.abs(c - selectedPiece.c);
+            if (dc === 1 && Math.abs(dr) === 1) {
+                boardState[r][c] = boardState[selectedPiece.r][selectedPiece.c];
+                boardState[selectedPiece.r][selectedPiece.c] = null;
+                selectedPiece = null;
+                turn = turn === 'red' ? 'black' : 'red';
+                gameStatus.innerText = `Turn: ${turn.toUpperCase()} Player`;
+                renderBoard();
+            }
+        }
+
+        function resetGame() {
+            selectedPiece = null;
+            turn = 'red';
+            gameStatus.innerText = "Turn: RED Player";
+            initBoard();
+        }
+
+        initBoard();
+
+        // Settings Menu Functions
+        function toggleSettings() {
+            settingsModal.style.display = settingsModal.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function toggleVolume() {
+            isMuted = !isMuted;
+            document.getElementById('volStatus').innerText = isMuted ? '🔇 Muted' : '🔊 On';
+        }
+
+        function changeTheme() {
+            currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+            document.getElementById('themeStatus').innerText = themes[currentThemeIndex];
+        }
+
+        function changeMode() {
+            currentModeIndex = (currentModeIndex + 1) % modes.length;
+            document.getElementById('modeStatus').innerText = modes[currentModeIndex];
+        }
+
+        function changeRuleset() {
+            currentRuleIndex = (currentRuleIndex + 1) % rules.length;
+            document.getElementById('ruleStatus').innerText = rules[currentRuleIndex];
+        }
+
+        // Privacy Policy & Secret Viper Trigger
         function openPrivacy() {
             settingsModal.style.display = 'none';
             gameScreen.style.display = 'none';
@@ -438,7 +542,6 @@
             gameScreen.style.display = 'flex';
         }
 
-        // Kufungua Password kupitia neno la siri "Viper" ndani ya Privacy Policy
         viperBtn.addEventListener('click', function() {
             pinInput.value = "";
             pinModal.style.display = 'flex';
@@ -455,7 +558,7 @@
                 vaultScreen.style.display = 'flex';
                 renderGallery();
             } else {
-                alert("PIN si sahihi!");
+                alert("Incorrect PIN!");
                 pinInput.value = "";
             }
         }
@@ -465,7 +568,7 @@
             gameScreen.style.display = 'flex';
         }
 
-        // Kusimamia picha za Vault
+        // Vault Image Handling
         imageInput.addEventListener('change', function(e) {
             const files = e.target.files;
             for (let file of files) {
@@ -483,7 +586,7 @@
         });
 
         function deletePhoto(id) {
-            if (confirm("Futa picha hii?")) {
+            if (confirm("Delete this photo permanently?")) {
                 photos = photos.filter(p => p.id !== id);
                 saveAndRender();
             }
@@ -491,9 +594,9 @@
 
         function saveAndRender() {
             try {
-                localStorage.setItem('checkers_vault_photos', JSON.stringify(photos));
+                localStorage.setItem('secure_3d_vault', JSON.stringify(photos));
             } catch (e) {
-                alert("Nafasi imejaa!");
+                alert("Storage is full!");
             }
             renderGallery();
         }
@@ -501,15 +604,15 @@
         function renderGallery() {
             gallery.innerHTML = '';
             if (photos.length === 0) {
-                gallery.innerHTML = '<div class="empty-msg">Hakuna picha zilizofichwa bado.</div>';
+                gallery.innerHTML = '<div class="empty-msg">No secure photos hidden yet.</div>';
                 return;
             }
             photos.forEach(photo => {
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.innerHTML = `
-                    <img src="${photo.src}" alt="Vault">
-                    <button class="delete-btn" onclick="deletePhoto(${photo.id})">Futa</button>
+                    <img src="${photo.src}" alt="Secure Vault">
+                    <button class="delete-btn" onclick="deletePhoto(${photo.id})">Delete</button>
                 `;
                 gallery.appendChild(card);
             });
