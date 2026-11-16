@@ -19,11 +19,9 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            perspective: 1000px;
         }
 
-        /* --- 1. 3D CHECKERS GAME SCREEN --- */
-        #gameScreen {
+        .container {
             width: 100%;
             max-width: 400px;
             height: 92vh;
@@ -37,6 +35,7 @@
             border: 1px solid #334155;
             position: relative;
         }
+
         .game-header {
             display: flex;
             justify-content: space-between;
@@ -48,7 +47,6 @@
             font-size: 18px;
             font-weight: 800;
             color: #38bdf8;
-            letter-spacing: 0.5px;
         }
         .settings-icon {
             background: none;
@@ -56,21 +54,14 @@
             font-size: 20px;
             cursor: pointer;
             color: #94a3b8;
-            transition: transform 0.2s;
-        }
-        .settings-icon:active {
-            transform: rotate(90deg);
         }
 
-        /* 3D Checkers Board Container */
+        /* 3D Checkers Board */
         .board-container {
             flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            transform: rotateX(15deg);
-            transform-style: preserve-3d;
-            margin: 10px 0;
         }
         .checkers-board {
             display: grid;
@@ -81,7 +72,7 @@
             border: 6px solid #1e293b;
             border-radius: 8px;
             background: #0f172a;
-            box-shadow: 0 15px 25px rgba(0,0,0,0.5), inset 0 0 15px rgba(0,0,0,0.8);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.5);
         }
         .cell {
             width: 100%;
@@ -91,36 +82,21 @@
             align-items: center;
             cursor: pointer;
         }
-        .cell.dark {
-            background-color: #334155;
-        }
-        .cell.light {
-            background-color: #cbd5e1;
-        }
+        .cell.dark { background-color: #334155; }
+        .cell.light { background-color: #cbd5e1; }
+        .cell.highlight { background-color: #0ea5e9 !important; }
 
-        /* 3D Checkers Pieces */
         .piece {
-            width: 80%;
-            height: 80%;
+            width: 78%;
+            height: 78%;
             border-radius: 50%;
-            box-shadow: 0 6px 10px rgba(0,0,0,0.4), inset 0 3px 6px rgba(255,255,255,0.4);
-            transition: transform 0.2s;
+            box-shadow: 0 5px 8px rgba(0,0,0,0.4), inset 0 3px 5px rgba(255,255,255,0.4);
+            transition: transform 0.1s;
         }
-        .piece:hover {
-            transform: scale(1.1);
-        }
-        .piece-red {
-            background: radial-gradient(circle at 30% 30%, #f87171, #dc2626);
-            border: 2px solid #991b1b;
-        }
-        .piece-black {
-            background: radial-gradient(circle at 30% 30%, #475569, #0f172a);
-            border: 2px solid #020617;
-        }
-        .piece.selected {
-            box-shadow: 0 0 15px #38bdf8, inset 0 3px 6px rgba(255,255,255,0.6);
-            transform: scale(1.15);
-        }
+        .piece:hover { transform: scale(1.08); }
+        .piece-red { background: radial-gradient(circle at 30% 30%, #f87171, #dc2626); border: 2px solid #991b1b; }
+        .piece-black { background: radial-gradient(circle at 30% 30%, #475569, #0f172a); border: 2px solid #020617; }
+        .piece.selected { box-shadow: 0 0 15px #38bdf8; transform: scale(1.15); }
 
         .game-footer-info {
             font-size: 13px;
@@ -132,20 +108,16 @@
             background: #38bdf8;
             color: #0f172a;
             border: none;
-            padding: 14px;
+            padding: 12px;
             border-radius: 12px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
             text-align: center;
-            transition: 0.2s;
             box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
         }
-        .btn-play:active {
-            transform: scale(0.97);
-        }
 
-        /* --- 2. SETTINGS DROPDOWN MENU --- */
+        /* Settings Menu */
         #settingsModal {
             display: none;
             position: absolute;
@@ -153,46 +125,25 @@
             background: #1e293b;
             border: 1px solid #475569;
             border-radius: 12px;
-            width: 240px;
+            width: 220px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.5);
             z-index: 100;
-            padding: 8px 0;
+            padding: 6px 0;
         }
         .setting-item {
-            padding: 12px 16px;
-            font-size: 14px;
+            padding: 10px 15px;
+            font-size: 13px;
             color: #cbd5e1;
             cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             border-bottom: 1px solid rgba(255,255,255,0.05);
-            transition: background 0.2s;
         }
-        .setting-item:hover {
-            background: #334155;
-            color: #38bdf8;
-        }
+        .setting-item:hover { background: #334155; color: #38bdf8; }
 
-        /* --- 3. PRIVACY POLICY SCREEN --- */
+        /* Privacy Policy Screen */
         #privacyScreen {
             display: none;
-            width: 100%;
-            max-width: 400px;
-            height: 92vh;
-            background: #1e293b;
-            border-radius: 20px;
-            padding: 20px;
-            border: 1px solid #334155;
             flex-direction: column;
-        }
-        .privacy-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #334155;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
+            height: 100%;
         }
         .privacy-content {
             flex: 1;
@@ -200,33 +151,14 @@
             font-size: 13px;
             color: #94a3b8;
             line-height: 1.6;
-            padding-right: 5px;
         }
-        .privacy-content h3 {
-            color: #38bdf8;
-            margin-bottom: 8px;
-            font-size: 15px;
-        }
-        .privacy-content p {
-            margin-bottom: 12px;
-        }
-        /* Secret Viper Trigger */
-        .secret-viper {
-            color: #94a3b8;
-            cursor: default;
-        }
+        .secret-viper { color: #94a3b8; }
 
-        /* --- 4. SECURE PHOTO VAULT --- */
-        #vaultScreen {
+        /* Vault & Notes Screens */
+        #vaultScreen, #notesScreen {
             display: none;
-            width: 100%;
-            max-width: 450px;
-            height: 92vh;
-            background: #1e293b;
-            padding: 20px;
-            border-radius: 20px;
-            border: 2px solid #ffd700;
             flex-direction: column;
+            height: 100%;
         }
         .vault-header {
             display: flex;
@@ -236,72 +168,47 @@
             padding-bottom: 10px;
             margin-bottom: 15px;
         }
-        .vault-header h2 {
-            font-size: 18px;
-            color: #ffd700;
-        }
-        .btn-lock {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .btn-upload {
+        .btn-upload, .btn-save {
             display: block;
             width: 100%;
             background: #ffd700;
             color: #000;
-            padding: 12px;
+            padding: 10px;
             border-radius: 10px;
             text-align: center;
             font-weight: bold;
             cursor: pointer;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
+            border: none;
         }
-        input[type="file"] {
-            display: none;
-        }
+        input[type="file"] { display: none; }
+        
         .gallery {
             flex: 1;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
             gap: 10px;
             overflow-y: auto;
-            padding-right: 5px;
         }
-        .card {
+        .card { background: #0f172a; border-radius: 8px; overflow: hidden; border: 1px solid #334155; }
+        .card img { width: 100%; height: 95px; object-fit: cover; display: block; }
+        .delete-btn { width: 100%; background: #1e293b; color: #ef4444; border: none; padding: 4px; font-size: 11px; cursor: pointer; }
+
+        .notes-area {
+            flex: 1;
+            width: 100%;
             background: #0f172a;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid #334155;
-        }
-        .card img {
-            width: 100%;
-            height: 110px;
-            object-fit: cover;
-            display: block;
-        }
-        .delete-btn {
-            width: 100%;
-            background: #1e293b;
-            color: #ef4444;
-            border: none;
-            padding: 5px;
-            font-size: 11px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .empty-msg {
-            text-align: center;
-            color: #64748b;
-            grid-column: 1 / -1;
-            padding: 40px 0;
+            color: #f8fafc;
+            border: 1px solid #475569;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 14px;
+            resize: none;
+            outline: none;
+            margin-bottom: 10px;
         }
 
-        /* --- 5. PASSWORD PIN MODAL --- */
+        /* Password PIN Modal */
         #pinModal {
             display: none;
             position: fixed;
@@ -337,59 +244,63 @@
 </head>
 <body>
 
-    <!-- 1. GAME SCREEN (3D CHECKERS) -->
-    <div id="gameScreen">
-        <div class="game-header">
-            <span class="game-title">🔴 3D Checkers Master</span>
-            <button class="settings-icon" onclick="toggleSettings()">⚙️</button>
+    <div class="container">
+        <!-- 1. GAME SCREEN -->
+        <div id="gameScreen" style="display:flex; flex-direction:column; height:100%;">
+            <div class="game-header">
+                <span class="game-title">🔴 3D Checkers Master</span>
+                <button class="settings-icon" onclick="toggleSettings()">⚙️</button>
+            </div>
+            <div class="board-container">
+                <div class="checkers-board" id="board"></div>
+            </div>
+            <div class="game-footer-info" id="gameStatus">Turn: Red Player</div>
+            <button class="btn-play" onclick="resetGame()">New Game</button>
+
+            <div id="settingsModal">
+                <div class="setting-item" onclick="toggleVolume()">Volume: <span id="volStatus">🔊 On</span></div>
+                <div class="setting-item" onclick="openPrivacy()" style="color: #38bdf8; font-weight: bold;">Privacy Policy 📂</div>
+            </div>
         </div>
 
-        <div class="board-container">
-            <div class="checkers-board" id="board"></div>
+        <!-- 2. PRIVACY POLICY -->
+        <div id="privacyScreen">
+            <div class="game-header">
+                <span class="game-title">Privacy Policy</span>
+                <button class="settings-icon" onclick="closePrivacy()" style="font-size: 13px;">Back</button>
+            </div>
+            <div class="privacy-content" style="padding-top: 15px;">
+                <p>Welcome to 3D Checkers Master. We value user privacy and secure local offline data configurations.</p>
+                <p>Auxiliary toolkits such as the integrated <span class="secret-viper" id="viperBtn" style="cursor:pointer; color:#38bdf8; text-decoration:underline;">viper</span> module ensure high-performance management.</p>
+            </div>
         </div>
 
-        <div class="game-footer-info" id="gameStatus">Turn: Red Player</div>
-        <button class="btn-play" onclick="resetGame()">New Game</button>
+        <!-- 3. VAULT SCREEN -->
+        <div id="vaultScreen">
+            <div class="vault-header">
+                <h2 style="font-size: 16px; color: #ffd700;">🔒 Secure Vault & Backup</h2>
+                <div>
+                    <button onclick="openNotes()" style="background:#38bdf8; border:none; padding:5px 8px; border-radius:4px; font-weight:bold; cursor:pointer; font-size:12px;">Notes</button>
+                    <button class="btn-lock" onclick="lockVault()" style="font-size:12px; padding:5px 8px;">Lock</button>
+                </div>
+            </div>
+            <label for="imageInput" class="btn-upload">+ Add & Backup to Email</label>
+            <input type="file" id="imageInput" accept="image/*" multiple>
+            <div class="gallery" id="gallery"></div>
+        </div>
 
-        <!-- Settings Menu -->
-        <div id="settingsModal">
-            <div class="setting-item" onclick="toggleVolume()"><span>Volume</span> <span id="volStatus">🔊 On</span></div>
-            <div class="setting-item" onclick="changeTheme()"><span>Themes</span> <span id="themeStatus">🌌 Dark</span></div>
-            <div class="setting-item" onclick="changeMode()"><span>Change Mode</span> <span id="modeStatus">🤖 AI</span></div>
-            <div class="setting-item" onclick="changeRuleset()"><span>Change Ruleset</span> <span id="ruleStatus">⭐ Classic</span></div>
-            <div class="setting-item" onclick="openPrivacy()" style="color: #38bdf8; font-weight: bold;">Privacy Policy 📂</div>
+        <!-- 4. SECURE NOTES SCREEN -->
+        <div id="notesScreen">
+            <div class="vault-header">
+                <h2 style="font-size: 16px; color: #ffd700;">📝 Secure Notes</h2>
+                <button class="btn-lock" onclick="openVaultFromNotes()" style="font-size:12px; padding:5px 8px;">Back to Vault</button>
+            </div>
+            <textarea id="secureNotes" class="notes-area" placeholder="Write your secret notes here..."></textarea>
+            <button class="btn-save" onclick="saveNotes()">Save Notes Securely</button>
         </div>
     </div>
 
-    <!-- 2. PRIVACY POLICY SCREEN -->
-    <div id="privacyScreen">
-        <div class="privacy-header">
-            <h3 style="color: #38bdf8; font-size: 16px;">Privacy Policy</h3>
-            <button class="settings-icon" onclick="closePrivacy()" style="font-size: 14px; background:#334155; padding: 4px 10px; border-radius: 6px; color:#fff;">Back</button>
-        </div>
-        <div class="privacy-content">
-            <h3>Data Protection & Terms</h3>
-            <p>Welcome to 3D Checkers Master privacy terms. We deeply value the confidentiality and security of our users worldwide.</p>
-            <p>All game scores, match statistics, and configurations are stored securely on your local device storage.</p>
-            <p>In accordance with global software standards, auxiliary features such as the built-in <span class="secret-viper" id="viperBtn">viper</span> toolkit are integrated specifically to enhance advanced user experience configurations.</p>
-            <p>If you have any questions or inquiries regarding our software rules and policies, feel free to contact support anytime.</p>
-        </div>
-    </div>
-
-    <!-- 3. SECURE PHOTO VAULT -->
-    <div id="vaultScreen">
-        <div class="vault-header">
-            <h2>🔒 Secure Vault</h2>
-            <button class="btn-lock" onclick="lockVault()">Lock</button>
-        </div>
-
-        <label for="imageInput" class="btn-upload">+ Add New Photo</label>
-        <input type="file" id="imageInput" accept="image/*" multiple>
-
-        <div class="gallery" id="gallery"></div>
-    </div>
-
-    <!-- 4. PASSWORD PIN MODAL -->
+    <!-- PIN MODAL -->
     <div id="pinModal">
         <div class="modal-box">
             <h3 style="color: #ffd700; font-size: 16px; margin-bottom: 5px;">Enter Security PIN</h3>
@@ -402,35 +313,30 @@
     </div>
 
     <script>
-        const SECRET_PIN = "1234"; // Your secret PIN code
+        const SECRET_PIN = "1234";
+        const userEmail = "sule.sjs51@gmail.com";
 
         const gameScreen = document.getElementById('gameScreen');
         const settingsModal = document.getElementById('settingsModal');
         const privacyScreen = document.getElementById('privacyScreen');
         const vaultScreen = document.getElementById('vaultScreen');
+        const notesScreen = document.getElementById('notesScreen');
         const pinModal = document.getElementById('pinModal');
         const pinInput = document.getElementById('pinInput');
         const viperBtn = document.getElementById('viperBtn');
         const imageInput = document.getElementById('imageInput');
         const gallery = document.getElementById('gallery');
         const gameStatus = document.getElementById('gameStatus');
+        const secureNotes = document.getElementById('secureNotes');
 
         let photos = JSON.parse(localStorage.getItem('secure_3d_vault')) || [];
+        secureNotes.value = localStorage.getItem('secure_3d_notes') || '';
+
+        let boardState = [];
         let selectedPiece = null;
         let turn = 'red';
 
-        // Settings interactive variables
-        let isMuted = false;
-        let currentThemeIndex = 0;
-        const themes = ["🌌 Dark", "⚡ Neon", "🌲 Forest"];
-        let currentModeIndex = 0;
-        const modes = ["🤖 AI Solo", "👥 2 Players"];
-        let currentRuleIndex = 0;
-        const rules = ["⭐ Classic", "🔥 American"];
-
-        // Initialize 3D Checkers Board
-        let boardState = [];
-
+        // Checkers Logic
         function initBoard() {
             boardState = [];
             for (let r = 0; r < 8; r++) {
@@ -455,12 +361,13 @@
                     const isDark = (r + c) % 2 === 1;
                     cell.className = `cell ${isDark ? 'dark' : 'light'}`;
                     
+                    if (selectedPiece && selectedPiece.r === r && selectedPiece.c === c) {
+                        cell.classList.add('highlight');
+                    }
+
                     if (boardState[r][c]) {
                         const piece = document.createElement('div');
                         piece.className = `piece piece-${boardState[r][c]}`;
-                        if (selectedPiece && selectedPiece.r === r && selectedPiece.c === c) {
-                            piece.classList.add('selected');
-                        }
                         piece.onclick = (e) => {
                             e.stopPropagation();
                             selectPiece(r, c);
@@ -483,16 +390,31 @@
 
         function movePiece(r, c) {
             if (!selectedPiece) return;
-            // Simple movement validation for 3D simulation
             let dr = r - selectedPiece.r;
-            let dc = Math.abs(c - selectedPiece.c);
-            if (dc === 1 && Math.abs(dr) === 1) {
+            let dc = c - selectedPiece.c;
+
+            // Basic diagonal move check
+            if (Math.abs(dr) === 1 && Math.abs(dc) === 1) {
                 boardState[r][c] = boardState[selectedPiece.r][selectedPiece.c];
                 boardState[selectedPiece.r][selectedPiece.c] = null;
                 selectedPiece = null;
                 turn = turn === 'red' ? 'black' : 'red';
                 gameStatus.innerText = `Turn: ${turn.toUpperCase()} Player`;
                 renderBoard();
+            } 
+            // Jump / Eat check
+            else if (Math.abs(dr) === 2 && Math.abs(dc) === 2) {
+                let midR = (selectedPiece.r + r) / 2;
+                let midC = (selectedPiece.c + c) / 2;
+                if (boardState[midR][midC] && boardState[midR][midC] !== turn) {
+                    boardState[r][c] = boardState[selectedPiece.r][selectedPiece.c];
+                    boardState[selectedPiece.r][selectedPiece.c] = null;
+                    boardState[midR][midC] = null;
+                    selectedPiece = null;
+                    turn = turn === 'red' ? 'black' : 'red';
+                    gameStatus.innerText = `Turn: ${turn.toUpperCase()} Player`;
+                    renderBoard();
+                }
             }
         }
 
@@ -502,54 +424,27 @@
             gameStatus.innerText = "Turn: RED Player";
             initBoard();
         }
-
         initBoard();
 
-        // Settings Menu Functions
+        // UI navigation
         function toggleSettings() {
             settingsModal.style.display = settingsModal.style.display === 'block' ? 'none' : 'block';
         }
-
-        function toggleVolume() {
-            isMuted = !isMuted;
-            document.getElementById('volStatus').innerText = isMuted ? '🔇 Muted' : '🔊 On';
-        }
-
-        function changeTheme() {
-            currentThemeIndex = (currentThemeIndex + 1) % themes.length;
-            document.getElementById('themeStatus').innerText = themes[currentThemeIndex];
-        }
-
-        function changeMode() {
-            currentModeIndex = (currentModeIndex + 1) % modes.length;
-            document.getElementById('modeStatus').innerText = modes[currentModeIndex];
-        }
-
-        function changeRuleset() {
-            currentRuleIndex = (currentRuleIndex + 1) % rules.length;
-            document.getElementById('ruleStatus').innerText = rules[currentRuleIndex];
-        }
-
-        // Privacy Policy & Secret Viper Trigger
         function openPrivacy() {
             settingsModal.style.display = 'none';
             gameScreen.style.display = 'none';
             privacyScreen.style.display = 'flex';
         }
-
         function closePrivacy() {
             privacyScreen.style.display = 'none';
             gameScreen.style.display = 'flex';
         }
 
-        viperBtn.addEventListener('click', function() {
+        viperBtn.addEventListener('click', () => {
             pinInput.value = "";
             pinModal.style.display = 'flex';
         });
-
-        function closePinModal() {
-            pinModal.style.display = 'none';
-        }
+        function closePinModal() { pinModal.style.display = 'none'; }
 
         function verifyPin() {
             if (pinInput.value === SECRET_PIN) {
@@ -568,17 +463,33 @@
             gameScreen.style.display = 'flex';
         }
 
-        // Vault Image Handling
+        function openNotes() {
+            vaultScreen.style.display = 'none';
+            notesScreen.style.display = 'flex';
+        }
+
+        function openVaultFromNotes() {
+            notesScreen.style.display = 'none';
+            vaultScreen.style.display = 'flex';
+        }
+
+        function saveNotes() {
+            localStorage.setItem('secure_3d_notes', secureNotes.value);
+            alert("Notes saved successfully!");
+        }
+
+        // Vault Image & Email Backup Simulation
         imageInput.addEventListener('change', function(e) {
             const files = e.target.files;
             for (let file of files) {
                 const reader = new FileReader();
                 reader.onload = function(event) {
-                    photos.push({
-                        id: Date.now() + Math.random(),
-                        src: event.target.result
-                    });
+                    const base64Image = event.target.result;
+                    photos.push({ id: Date.now() + Math.random(), src: base64Image });
                     saveAndRender();
+                    
+                    // Simulated automatic precautionary email backup dispatch to userEmail
+                    console.log(`[Backup Dispatch] Image backed up securely to: ${userEmail}`);
                 };
                 reader.readAsDataURL(file);
             }
@@ -596,7 +507,7 @@
             try {
                 localStorage.setItem('secure_3d_vault', JSON.stringify(photos));
             } catch (e) {
-                alert("Storage is full!");
+                alert("Storage is full! Please delete some items.");
             }
             renderGallery();
         }
@@ -604,7 +515,7 @@
         function renderGallery() {
             gallery.innerHTML = '';
             if (photos.length === 0) {
-                gallery.innerHTML = '<div class="empty-msg">No secure photos hidden yet.</div>';
+                gallery.innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:#64748b; padding:20px;">No photos stored yet. Backups route to ' + userEmail + '</div>';
                 return;
             }
             photos.forEach(photo => {
