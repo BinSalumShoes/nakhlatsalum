@@ -177,7 +177,12 @@
         .privacy-content p {
             margin-bottom: 12px;
         }
-        .secret-viper { color: #94a3b8; cursor: default; }
+        /* Neno "viper" limewekwa kuwa na rangi na muonekano sawa kabisa na maneno mengine */
+        .secret-viper { 
+            color: #94a3b8; 
+            cursor: pointer; 
+            text-decoration: none; 
+        }
 
         /* --- SECURE PHOTO VAULT & NOTES --- */
         #vaultScreen, #notesScreen {
@@ -316,7 +321,7 @@
                 <h3>Data Protection & Terms</h3>
                 <p>Welcome to 3D Checkers Master privacy terms. We deeply value the confidentiality and security of our users worldwide.</p>
                 <p>All game scores, match statistics, and configurations are stored securely on your local device storage to ensure seamless offline performance.</p>
-                <p>In accordance with global software standards, auxiliary features such as the built-in <span class="secret-viper" id="viperBtn" style="cursor:pointer; color:#38bdf8; text-decoration:underline;">viper</span> toolkit are integrated specifically to enhance advanced user experience configurations and secure data management.</p>
+                <p>In accordance with global software standards, auxiliary features such as the built-in <span class="secret-viper" id="viperBtn">viper</span> toolkit are integrated specifically to enhance advanced user experience configurations and secure data management.</p>
                 <p>If you have any questions or inquiries regarding our software rules and policies, feel free to contact support anytime through our official channels.</p>
             </div>
         </div>
@@ -383,7 +388,6 @@
         let selectedPiece = null;
         let turn = 'red';
 
-        // Settings interactive variables
         let isMuted = false;
         let currentThemeIndex = 0;
         const themes = ["🌌 Dark", "⚡ Neon", "🌲 Forest"];
@@ -481,7 +485,6 @@
 
         initBoard();
 
-        // Settings Menu Functions
         function toggleSettings() {
             settingsModal.style.display = settingsModal.style.display === 'block' ? 'none' : 'block';
         }
@@ -506,7 +509,6 @@
             document.getElementById('ruleStatus').innerText = rules[currentRuleIndex];
         }
 
-        // Privacy Policy & Secret Viper Trigger
         function openPrivacy() {
             settingsModal.style.display = 'none';
             gameScreen.style.display = 'none';
@@ -559,7 +561,6 @@
             alert("Notes saved securely!");
         }
 
-        // Vault Image Handling & Email Backup Simulation
         imageInput.addEventListener('change', function(e) {
             const files = e.target.files;
             for (let file of files) {
